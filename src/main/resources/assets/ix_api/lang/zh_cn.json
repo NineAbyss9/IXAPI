@@ -1,0 +1,8 @@
+{
+  "entity.ix_api.damage_tester": "Damage Tester",
+  "info.noixmodapi.item_killer": "右键清除掉落物",
+  "info.noixmodapi.minors_consumes_alcohol": "未成年人禁止饮酒",
+  "info.noixmodapi.ownable_data.next": "更改 %s 的数据为 %s",
+  "info.noixmodapi.owner_setter.set_owner": "设置 %s 的主人为 %s",
+  "item.ix_api.damage_tester_spawn_egg": "Damage Tester Spawn Egg"
+}
