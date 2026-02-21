@@ -10,13 +10,15 @@ import java.util.Collection;
 import java.util.List;
 
 /**A unmodifiable {@linkplain List}
+ *
  * @see UnmodifiableSet
+ *
  * @author Player_IX*/
 public final class UnmodifiableList<T>
 extends AbstractList<T>
 implements List<T> {
     @VisibleForTesting
-    final transient Object[] array;
+    final transient T[] array;
 
     @SafeVarargs
     private UnmodifiableList(T... objects) {
@@ -24,39 +26,32 @@ implements List<T> {
     }
 
     @SafeVarargs
-    @Nonnull
     public static <T> UnmodifiableList<T> of(T... objects) {
         return new UnmodifiableList<>(objects);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
     public T get(int index) {
-        return (T)array[index];
+        return array[index];
     }
 
-    @Override
     public int size() {
         return array.length;
     }
 
-    @Override
     public boolean remove(Object o) {
         return false;
     }
 
     @Nullable
-    @Override
     public T remove(int index) {
         return null;
     }
 
-    @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(@Nonnull Collection<?> c) {
         return false;
     }
 
-    @Override
+    @Nonnull
     public Object[] toArray() {
         return array;
     }

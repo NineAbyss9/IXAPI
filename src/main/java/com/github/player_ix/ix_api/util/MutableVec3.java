@@ -1,7 +1,7 @@
 
 package com.github.player_ix.ix_api.util;
 
-import com.github.player_ix.ix_api.api.annotation.PFMAreNonnullByDefault;
+import org.NineAbyss9.annotation.PFMAreNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.world.phys.Vec3;
@@ -17,9 +17,9 @@ public class MutableVec3 implements Position {
     private double z;
     /**Creates a new {@linkplain MutableVec3}*/
     public MutableVec3(double pX, double pY, double pZ) {
-        x = pX;
-        y = pY;
-        z = pZ;
+        this.x = pX;
+        this.y = pY;
+        this.z = pZ;
     }
 
     public double x() {
@@ -81,6 +81,10 @@ public class MutableVec3 implements Position {
 
     public Vec9 toVec9() {
         return Vec9.of(this);
+    }
+
+    public static MutableVec3 create() {
+        return ZERO;
     }
 
     public static MutableVec3 create(double px, double py, double pz) {
