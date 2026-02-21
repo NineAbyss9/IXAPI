@@ -15,6 +15,8 @@ import net.minecraft.world.phys.Vec3;
 import org.NineAbyss9.math.AbyssMath;
 import org.NineAbyss9.math.MathSupport;
 
+import java.util.function.Supplier;
+
 @PAMAreNonnullByDefault
 public record ParticleUtil(Entity entity) {
     private Level level() {
@@ -138,6 +140,11 @@ public record ParticleUtil(Entity entity) {
         }
     }
 
+    @ClientOnly
+    public static void spawnAnim(Supplier<ParticleOptions> supplier, Level level, Entity pos) {
+        spawnAnim(getFromSupplier(supplier), level, pos);
+    }
+
     @ServerOnly
     public static void spawnAnim(Entity entity) {
         spawnAnim(entity, ParticleTypes.POOF);
@@ -158,5 +165,9 @@ public record ParticleUtil(Entity entity) {
 
     public static ParticleOptions getItemParticleOption(ItemStack stackIn) {
         return new ItemParticleOption(ParticleTypes.ITEM, stackIn);
+    }
+
+    public static ParticleOptions getFromSupplier(Supplier<ParticleOptions> supplier) {
+        return supplier.get();
     }
 }

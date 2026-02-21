@@ -13,7 +13,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(modid = IXApi.MOD_ID)
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ApiEntities {
     public static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(
             ForgeRegistries.ENTITY_TYPES, IXApi.MOD_ID);

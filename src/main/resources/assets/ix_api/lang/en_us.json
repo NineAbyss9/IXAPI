@@ -1,8 +1,8 @@
 {
   "entity.ix_api.damage_tester": "Damage Tester",
-  "info.noixmodapi.item_killer": "Right click to remove ItemEntity",
-  "info.noixmodapi.minors_consumes_alcohol": "Minors are prohibited from consuming alcohol.",
-  "info.noixmodapi.ownable_data.next": "Changed %s 's OwnableFlag to %s",
-  "info.noixmodapi.owner_setter.set_owner": "Set %s 's owner to %s",
+  "info.ix_api.item_killer": "Right click to remove ItemEntity",
+  "info.ix_api.minors_consumes_alcohol": "Minors are prohibited from consuming alcohol.",
+  "info.ix_api.ownable_data.next": "Changed %s 's OwnableFlag to %s",
+  "info.ix_api.owner_setter.set_owner": "Set %s 's owner to %s",
   "item.ix_api.damage_tester_spawn_egg": "Damage Tester Spawn Egg"
 }

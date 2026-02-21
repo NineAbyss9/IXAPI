@@ -17,9 +17,9 @@ license = "GPL License"
 # The modid of the mod
 modId = "ix_api" #mandatory
 # The version number of the mod
-version = "1.0.4" #mandatory
+version = "1.0.5" #mandatory
 # A display name for the mod
-displayName = "IXAPI" #mandatory
+displayName = "IXApi" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://docs.minecraftforge.net/en/latest/misc/updatechecker/
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI

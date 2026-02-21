@@ -41,7 +41,9 @@ public class IXApi implements ModOfNineAbyss {
 
     private void addTabs(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS)
-            event.accept(ApiItems.TESTER_SPAWN_EGG.get());
+            event.accept(ApiItems.TESTER_SPAWN_EGG);
+        if (event.getTabKey() == CreativeModeTabs.OP_BLOCKS)
+            event.accept(ApiItems.OWNER_SETTER);
     }
 
     public static boolean isNoIXApiLoaded() {
