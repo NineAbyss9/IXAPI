@@ -33,7 +33,7 @@ extends MobEffectInstance {
 
     public EffectInstance(MobEffect pEffect, int pDuration, int pAmplifier, boolean pAmbient, boolean pVisible,
                           boolean pShowIcon, @Nullable MobEffectInstance pHiddenEffect,
-                          FactorData pFactorData) {
+                          MobEffectInstance.FactorData pFactorData) {
         super(pEffect, pDuration, pAmplifier, pAmbient, pVisible, pShowIcon, pHiddenEffect, Optional.of(pFactorData));
     }
 

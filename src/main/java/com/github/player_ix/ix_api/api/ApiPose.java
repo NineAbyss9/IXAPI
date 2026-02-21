@@ -19,8 +19,7 @@ public enum ApiPose implements IExtensibleEnum {
     ApiPose() {
     }
 
-    @SuppressWarnings("unused")
-    public static ApiPose create(String name) {
+    public static ApiPose create(@SuppressWarnings("unused") String name) {
         throw new IllegalStateException("Enum not extended");
     }
 }

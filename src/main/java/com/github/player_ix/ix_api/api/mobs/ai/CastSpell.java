@@ -9,9 +9,7 @@ import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.world.entity.ai.behavior.OneShot;
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import org.NineAbyss9.annotation.Unused;
 
-@Unused
 public class CastSpell {
     public CastSpell() {}
 

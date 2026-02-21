@@ -7,13 +7,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(modid = IXApi.MOD_ID)
 public class ApiEntities {
     public static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(
             ForgeRegistries.ENTITY_TYPES, IXApi.MOD_ID);
@@ -24,7 +21,6 @@ public class ApiEntities {
         return REGISTER.register(name, ()->builder.build(name));
     }
 
-    @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(DAMAGE_TESTER.get(), DamageTester.createAttributes());
     }

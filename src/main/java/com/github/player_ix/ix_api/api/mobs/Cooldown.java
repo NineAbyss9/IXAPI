@@ -1,30 +1,31 @@
 
 package com.github.player_ix.ix_api.api.mobs;
 
-import org.NineAbyss9.annotation.Unused;
 import com.google.common.collect.Maps;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemCooldowns;
 
 import java.util.Map;
 
 /**The {@code Cooldown} class is a util that save cooldowns in entities.
  */
-@Unused
 public class Cooldown {
     public final Map<String, CooldownInstance> cooldowns = Maps.newHashMap();
     protected int tickCount;
     public Cooldown() {
     }
 
+    //ItemCooldowns;
+
     public boolean isOnCooldown(String  p_41520_) {
         return this.getCooldownPercent(p_41520_, 0.0F) > 0.0F;
     }
 
     public float getCooldownPercent(String  p_41522_, float p_41523_) {
-        CooldownInstance $$2 = this.cooldowns.get(p_41522_);
-        if ($$2 != null) {
-            float $$3 = (float)($$2.endTime - $$2.startTime);
-            float $$4 = (float)$$2.endTime - ((float)this.tickCount + p_41523_);
+        CooldownInstance instance = this.cooldowns.get(p_41522_);
+        if (instance != null) {
+            float $$3 = (float)(instance.endTime - instance.startTime);
+            float $$4 = (float)instance.endTime - ((float)this.tickCount + p_41523_);
             return Mth.clamp($$4 / $$3, 0.0F, 1.0F);
         } else {
             return 0.0F;

@@ -8,5 +8,5 @@ import java.lang.annotation.RetentionPolicy;
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 public @interface UseFor {
-    Class<?> getClazz();
+    java.lang.Class<?> getClazz();
 }

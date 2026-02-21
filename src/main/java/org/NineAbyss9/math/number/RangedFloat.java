@@ -7,7 +7,8 @@ import java.io.Serial;
 import java.util.Random;
 
 public abstract class RangedFloat
-extends Number {
+extends Number
+implements NumberProvider<Float> {
     /**@deprecated */
     @Deprecated
     static final Random random = new Random();
@@ -30,7 +31,7 @@ extends Number {
         return max;
     }
 
-    public static RangedFloat of(Float pMin, Float pMax) {
+    public static RangedFloat of(float pMin, float pMax) {
         if (pMin > pMax)
             throw new IllegalArgumentException("max must be greater than min");
         return new Instance(pMin, pMax);

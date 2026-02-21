@@ -1,7 +1,6 @@
 
 package org.NineAbyss9.util;
 
-@SuppressWarnings("unused")
 public class Nothing {
     private static Nothing instance;
     private Nothing() {

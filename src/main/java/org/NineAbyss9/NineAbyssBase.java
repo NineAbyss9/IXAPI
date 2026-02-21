@@ -1,6 +1,7 @@
 
 package org.NineAbyss9;
 
+import org.NineAbyss9.annotation.NotCheck;
 import org.NineAbyss9.block.TryBlock;
 import org.NineAbyss9.cache.Cache;
 import org.NineAbyss9.event.EventContainer;
@@ -8,10 +9,11 @@ import org.NineAbyss9.event.EventContainer;
 /**The base of {@code NineAbyss}
  *
  * @author NineAbyss*/
-public class NineAbyssBase implements AutoCloseable
+public class NineAbyssBase //implements AutoCloseable
 {
     public static EventContainer eventContainer;
     private NineAbyssBase() {
+        throw new AssertionError();
     }
 
     public static void setup() {
@@ -37,8 +39,9 @@ public class NineAbyssBase implements AutoCloseable
         return 9;
     }
 
+    @NotCheck
     public String getVersion() {
-        return "1.0.3";
+        return "1.0.0";
     }
 
     public static void print(String msg) {

@@ -5,7 +5,6 @@ import org.NineAbyss9.util.IXUtil;
 
 import java.lang.reflect.*;
 
-/**A util that provides some methods about {@code Reflect}*/
 public class ReflectUtil {
     private ReflectUtil() {
     }

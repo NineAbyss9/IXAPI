@@ -3,7 +3,6 @@ package org.NineAbyss9.util.map;
 
 import java.util.*;
 
-/**Building now, do not use.*/
 public class TowValueHashMap<K, V, V1>
 extends AbstractTwoValueMap<K, V, V1> {
     public TowValueHashMap() {

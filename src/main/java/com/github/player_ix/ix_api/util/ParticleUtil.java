@@ -3,24 +3,20 @@ package com.github.player_ix.ix_api.util;
 
 import com.github.player_ix.ix_api.api.annotation.ClientOnly;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.*;
 import org.NineAbyss9.annotation.PAMAreNonnullByDefault;
 import com.github.player_ix.ix_api.api.annotation.ServerOnly;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.NineAbyss9.math.AbyssMath;
+import org.NineAbyss9.math.MathSupport;
 
 @PAMAreNonnullByDefault
 public record ParticleUtil(Entity entity) {
-    private static final RandomSource random = RandomSource.create();
-
     private Level level() {
         return this.entity.level();
     }
@@ -92,6 +88,10 @@ public record ParticleUtil(Entity entity) {
         level.sendParticles(particle, position.x(), position.y(), position.z(), count, dx, dy, dz, speed);
     }
 
+    public void sendParticles(ParticleOptions options, int count, double dx, double dy, double dz, double speed) {
+        sendParticles((ServerLevel)this.entity.level(), options, this.entity.position(), count, dx, dy, dz, speed);
+    }
+
     @ServerOnly
     public static void explode(ServerLevel level, Vec3 position) {
         level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, position.x(), position.y(), position.z(), 1,
@@ -120,9 +120,14 @@ public record ParticleUtil(Entity entity) {
 
     @ServerOnly
     public static void spawnAnim(Entity entity, ParticleOptions options) {
+        spawnAnim(entity, options, 20);
+    }
+
+    public static void spawnAnim(Entity entity, ParticleOptions options, int count) {
         AABB aabb = entity.getBoundingBox();
-        sendParticles((ServerLevel)entity.level(), options, entity.position(), 20,
-                aabb.getXsize() - 0.2, aabb.getYsize(), aabb.getZsize() - 0.2, random.nextGaussian() * 0.02);
+        sendParticles((ServerLevel)entity.level(), options, entity.position(), count,
+                aabb.getXsize() - 0.2, aabb.getYsize(), aabb.getZsize() - 0.2,
+                MathSupport.random.nextGaussian() * 0.02);
     }
 
     @ClientOnly
@@ -136,6 +141,19 @@ public record ParticleUtil(Entity entity) {
     @ServerOnly
     public static void spawnAnim(Entity entity) {
         spawnAnim(entity, ParticleTypes.POOF);
+    }
+
+    public static void addBlockParticle(Level pLevel, BlockPos pPos, double pX, double pY, double pZ, double xz, double yz,
+                                        double zz) {
+        pLevel.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, pLevel.getBlockState(pPos)), pX, pY, pZ, xz, yz, zz);
+    }
+
+    public static void addBlockParticle(Level pLevel, BlockPos pPos, double pX, double pY, double pZ) {
+        addBlockParticle(pLevel, pPos, pX, pY, pZ, AbyssMath.random(0.3), 0.2, AbyssMath.random(0.3));
+    }
+
+    public static void addBlockParticle(Level pLevel, BlockPos pPos) {
+        addBlockParticle(pLevel, pPos, pPos.getX() + 0.5, pPos.getY(), pPos.getZ() + 0.5);
     }
 
     public static ParticleOptions getItemParticleOption(ItemStack stackIn) {

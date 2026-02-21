@@ -2,7 +2,6 @@
 package com.github.player_ix.ix_api.init;
 
 import com.github.player_ix.ix_api.IXApi;
-import com.github.player_ix.ix_api.common.item.OwnerSetter;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
@@ -16,7 +15,6 @@ import java.util.function.Supplier;
 public class ApiItems {
     public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS,
             IXApi.MOD_ID);
-    public static final RegistryObject<Item> OWNER_SETTER;
     public static final RegistryObject<Item> TESTER_SPAWN_EGG;
 
     private static RegistryObject<Item> spawnEgg(String name, Supplier<? extends EntityType<? extends Mob>>
@@ -29,7 +27,6 @@ public class ApiItems {
     }
 
     static {
-        OWNER_SETTER = REGISTER.register("owner_setter", OwnerSetter::new);
         TESTER_SPAWN_EGG = spawnEgg("damage_tester", ApiEntities.DAMAGE_TESTER,
                 0, 0);
     }

@@ -1,17 +1,12 @@
 
 package com.github.player_ix.ix_api.api.mobs.ai.goal;
 
-import com.github.player_ix.ix_api.util.Maths;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import org.jetbrains.annotations.NotNull;
 import org.NineAbyss9.util.IXUtil;
@@ -28,37 +23,30 @@ public class ApiMeleeAttackGoal extends Goal implements IXUtilUser {
     protected int ticksUntilNextPathRecalculation;
     protected int ticksUntilNextAttack;
     protected long lastCanUseCheck;
-    protected int failedPathFindingPenalty = 0;
-    protected final boolean canPenalize = false;
-    protected final boolean p_1145;
-    protected final boolean p_1146;
-    protected final float p_1147;
+    //protected int failedPathFindingPenalty = 0;
+    protected final boolean cooldownByHealth;
     protected final double attackRange;
+    private boolean better;
+    private int moveAccuracy;
 
-    public ApiMeleeAttackGoal(PathfinderMob pMob, double pSpeed, boolean p_25554_, boolean p_25555_, float exp, double range) {
+    public ApiMeleeAttackGoal(PathfinderMob pMob, double pSpeed, boolean p_25554_, double range) {
         this.mob = pMob;
         this.speedModifier = pSpeed;
-        this.p_1145 = p_25554_;
-        this.p_1146 = p_25555_;
-        this.p_1147 = exp;
+        this.cooldownByHealth = p_25554_;
         this.attackRange = range;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
-    public ApiMeleeAttackGoal(PathfinderMob mob, double d, boolean p_1145, boolean p_1146) {
-        this(mob, d, p_1145, p_1146, 2f, Math.PI);
-    }
-
-    public ApiMeleeAttackGoal(PathfinderMob mob, double d, boolean b, boolean f, float exp) {
-        this(mob, d, b, f, exp, Math.PI);
+    public ApiMeleeAttackGoal(PathfinderMob mob, double d, boolean cooldownHealth) {
+        this(mob, d, cooldownHealth, 2.0);
     }
 
     public ApiMeleeAttackGoal(PathfinderMob finder, double speed) {
-        this(finder, speed, false, false);
+        this(finder, speed, false);
     }
 
     public ApiMeleeAttackGoal(PathfinderMob finder, double speed, double range) {
-        this(finder, speed, false, false, 0F, range);
+        this(finder, speed, false, range);
     }
 
     public boolean canUse() {
@@ -73,14 +61,6 @@ public class ApiMeleeAttackGoal extends Goal implements IXUtilUser {
                 return false;
             } else if (!livingentity.isAlive()) {
                 return false;
-            } else if (this.canPenalize) {
-                if (--this.ticksUntilNextPathRecalculation <= 0) {
-                    path = this.mob.getNavigation().createPath(livingentity, 0);
-                    this.ticksUntilNextPathRecalculation = 4 + this.mob.getRandom().nextInt(7);
-                    return path != null;
-                } else {
-                    return true;
-                }
             } else {
                 path = this.mob.getNavigation().createPath(livingentity, 0);
                 if (path != null) {
@@ -134,7 +114,7 @@ public class ApiMeleeAttackGoal extends Goal implements IXUtilUser {
         if (livingentity != null) {
             this.mob.getLookControl().setLookAt(livingentity, 30.0F, this.mob.getMaxHeadXRot());
             double d0 = this.mob.getPerceivedTargetDistanceSquareForMeleeAttack(livingentity);
-            double p_1147 = this.mob.distanceToSqr(livingentity);
+            //double p_1147 = this.mob.distanceToSqr(livingentity);
             this.ticksUntilNextPathRecalculation = Math.max(this.ticksUntilNextPathRecalculation - 1, 0);
             if ((this.mob.getSensing().hasLineOfSight(livingentity)) && this.ticksUntilNextPathRecalculation <= 0 &&
                     (this.pathedTargetX == 0.0 && this.pathedTargetY == 0.0 && this.pathedTargetZ == 0.0 || livingentity
@@ -144,32 +124,18 @@ public class ApiMeleeAttackGoal extends Goal implements IXUtilUser {
                 this.pathedTargetY = livingentity.getY();
                 this.pathedTargetZ = livingentity.getZ();
                 this.ticksUntilNextPathRecalculation = 4 + this.mob.getRandom().nextInt(7);
-                if (this.canPenalize) {
-                    this.ticksUntilNextPathRecalculation += this.failedPathFindingPenalty;
-                    if (this.mob.getNavigation().getPath() != null) {
-                        Node finalPathPoint = this.mob.getNavigation().getPath().getEndNode();
-                        if (finalPathPoint != null && livingentity.distanceToSqr(finalPathPoint.asVec3()) < 0.6) {
-                            this.failedPathFindingPenalty = 0;
-                        } else {
-                            this.failedPathFindingPenalty += 4;
-                        }
-                    } else {
-                        this.failedPathFindingPenalty += 4;
-                    }
-                }
                 if (d0 > 1024.0) {
                     this.ticksUntilNextPathRecalculation += 4;
                 } else if (d0 > 256.0) {
                     this.ticksUntilNextPathRecalculation += 2;
                 }
-                if (p_1146 && p_1147 < Maths.square(this.attackRange)) {
-                    this.mob.level().explode(this.mob, this.mob.getX(), this.mob.getY(), this.mob.getZ(), this.p_1147, Level.ExplosionInteraction.MOB);
-                    ((ServerLevel)this.mob.level()).sendParticles(ParticleTypes.LARGE_SMOKE, this.mob.getX(), this.mob.getY(),
-                            this.mob.getZ(), 15, 0, 0, 0, 0.35);
-                    this.mob.discard();
-                }
-                if (!this.mob.getNavigation().moveTo(livingentity, this.speedModifier)) {
-                    this.ticksUntilNextPathRecalculation += 15;
+                if (better && this.mob.tickCount % this.moveAccuracy == 0) {
+                    this.mob.getMoveControl().setWantedPosition(livingentity.getX(), livingentity.getY(), livingentity.getZ(),
+                            this.speedModifier);
+                } else {
+                    if (!this.mob.getNavigation().moveTo(livingentity, this.speedModifier)) {
+                        this.ticksUntilNextPathRecalculation += 15;
+                    }
                 }
                 this.ticksUntilNextPathRecalculation = this.adjustedTickDelay(this.ticksUntilNextPathRecalculation);
             }
@@ -192,11 +158,11 @@ public class ApiMeleeAttackGoal extends Goal implements IXUtilUser {
     }
 
     protected int getAttackCooldown() {
-        return p_1145 ? (int)((this.mob.getHealth() / this.mob.getMaxHealth()) * 10f) : reducedTickDelay(20);
+        return cooldownByHealth ? (int)((this.mob.getHealth() / this.mob.getMaxHealth()) * 10f) : reducedTickDelay(20);
     }
 
     protected double getAttackReachSqr(@NotNull LivingEntity p_25556_) {
-        if (this.attackRange != Math.PI) {
+        if (this.attackRange != 2.0) {
             return this.attackRange;
         }
         return this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + p_25556_.getBbWidth();
@@ -204,5 +170,11 @@ public class ApiMeleeAttackGoal extends Goal implements IXUtilUser {
 
     protected <T> T convert() {
         return IXUtil.c.convert(this.mob);
+    }
+
+    public ApiMeleeAttackGoal better(int pAccuracy) {
+        this.better = true;
+        this.moveAccuracy = pAccuracy;
+        return this;
     }
 }

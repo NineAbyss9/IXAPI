@@ -5,8 +5,7 @@ import org.NineAbyss9.annotation.PFMAreNonnullByDefault;
 
 import java.awt.*;
 
-/**Nutshell, the first {@code float} is red, and the second is green, the end is blue.(The "RGB")
- * @author Player_IX
+/**@author Player_IX
  */
 @PFMAreNonnullByDefault
 @SuppressWarnings("unused")
@@ -49,7 +48,7 @@ public class Colors {
     }
 
     public static Color newColor(int colorCode) {
-        return Color.decode(String.valueOf(colorCode));
+        return Color.decode(Integer.toString(colorCode));
     }
 
     public static Color hexToColor(String hex) {

@@ -4,11 +4,11 @@ package com.github.player_ix.ix_api.network;
 import com.github.player_ix.ix_api.IXApi;
 import com.github.player_ix.ix_api.network.packet.BossBarUpdatePacket;
 import com.github.player_ix.ix_api.util.ResourceLocations;
+import com.google.common.base.Predicates;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import org.NineAbyss9.util.function.FunctionCollector;
 
 public class APINetwork {
     private static final String PROTOCOL = "ix_api_packet";
@@ -18,7 +18,7 @@ public class APINetwork {
     public static void register() {
         INSTANCE = NetworkRegistry.newSimpleChannel(ResourceLocations.fromNamespaceAndPath
                         (IXApi.MOD_ID, "main"),
-                () -> PROTOCOL, FunctionCollector.alwaysTrue(), FunctionCollector.alwaysTrue()
+                () -> PROTOCOL, Predicates.alwaysTrue(), Predicates.alwaysTrue()
         );
         INSTANCE.registerMessage(nextId(), BossBarUpdatePacket.class, BossBarUpdatePacket::encode,
                 BossBarUpdatePacket::decode, BossBarUpdatePacket::handle

@@ -7,11 +7,13 @@ import java.util.Random;
 
 /**Class for math.*/
 public class AbyssMath {
+    @org.NineAbyss9.annotation.NotCheck
     public static final int TRUTH = 9;
     /**Holds the Pi value.*/
-    public static final Float PI = 3.1415926535897932384626F;
+    public static final float PI = 3.1415926535897932384626F;
     /**@see Math#E*/
-    public static final Float E = (float)Math.E;
+    public static final float E = 2.7182818284590452354F;
+    /**Holds a {@linkplain Random}*/
     public static final Random random = new Random();
 
     //Base
@@ -41,6 +43,14 @@ public class AbyssMath {
 
     public static float square(float a) {
         return toThePowerOf(a, 2);
+    }
+
+    public static int toThePowerOf(int root, int index) {
+        int base = root;
+        int cache = 0;
+        for (;cache < index;cache++)
+            base *= root;
+        return base;
     }
 
     public static float toThePowerOf(float root, int index) {
@@ -76,7 +86,7 @@ public class AbyssMath {
         return Math.min(Math.abs(a), Math.abs(b));
     }
 
-    //Q
+    //Upgrade
     public static float random() {
         return random.nextFloat();
     }
@@ -89,20 +99,56 @@ public class AbyssMath {
         return randomBetween(random, min, max);
     }
 
-    public static double randomBetween(Random ran, double min, double max) {
-        return ran.nextDouble(max - min + 1) + min;
+    public static double randomBetween(Random rand, double min, double max) {
+        return rand.nextDouble(max - min + 1) + min;
     }
 
     public static double randomBetween(double min, double max) {
         return randomBetween(random, min, max);
     }
 
-    public static int randomBetween(Random ran, int min, int max) {
-        return ran.nextInt(max - min + 1) + min;
+    public static int randomBetween(Random rand, int min, int max) {
+        return rand.nextInt(max - min + 1) + min;
     }
 
     public static int randomBetween(int min, int max) {
         return randomBetween(random, min, max);
+    }
+
+    public static float average(float... values) {
+        float cache = 0;
+        for (float f : values)
+            cache += f;
+        return cache / values.length;
+    }
+
+    public static double average(double... values) {
+        double cache = 0;
+        for (double d : values)
+            cache += d;
+        return cache / values.length;
+    }
+
+    public static int average(int... values) {
+        int cache = 0;
+        for (int f : values)
+            cache += f;
+        return cache / values.length;
+    }
+
+    public static void validNumberNotZero(int value) {
+        if (value == 0)
+            throw new InvalidNumberException();
+    }
+
+    public static void validNumberNotZero(float value) {
+        if (value == 0)
+            throw new InvalidNumberException();
+    }
+
+    public static void validNumberNotZero(double value) {
+        if (value == 0)
+            throw new InvalidNumberException();
     }
 
     public static float random(@Message("value should be positive") float value) {
@@ -115,6 +161,15 @@ public class AbyssMath {
 
     public static int random(@Message("value should be positive") int value) {
         return randomBetween(-value, value);
+    }
+
+    public static double randomMax(double pValue, double max) {
+        double value = random(pValue);
+        if (value < 0) {
+            return Math.min(value, -max);
+        } else {
+            return Math.max(value, max);
+        }
     }
 
     public static int aliveOrNull() {
@@ -149,46 +204,15 @@ public class AbyssMath {
         return Math.min(Math.max(value, min), max);
     }
 
-    public static Lerp lerp() {
-        return new Lerp();
+    public static MathSupport.Lerp lerp() {
+        return new MathSupport.Lerp();
     }
 
     public static float lerp(float delta, float start, float end) {
-        return new Lerp(delta, start, end).floatValue();
+        return new MathSupport.Lerp(delta, start, end).floatValue();
     }
 
     public static double lerp(double delta, double start, double end) {
-        return new Lerp(delta, start, end).doubleValue();
-    }
-
-    public static class Lerp {
-        private Float value;
-        private Double doubleValue;
-        public Lerp() {
-        }
-
-        public Lerp(float delta, float start, float end) {
-            run(delta, start, end);
-        }
-
-        public Lerp(double delta, double start, double end) {
-            run(delta, start, end);
-        }
-
-        public void run(float delta, float start, float end) {
-            value = start + delta * (end - start);
-        }
-
-        public void run(double delta, double start, double end) {
-            doubleValue = start + delta * (end - start);
-        }
-
-        public Float floatValue() {
-            return value;
-        }
-
-        public Double doubleValue() {
-            return doubleValue;
-        }
+        return new MathSupport.Lerp(delta, start, end).doubleValue();
     }
 }

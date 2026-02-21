@@ -26,6 +26,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,9 +52,9 @@ extends PathfinderMob {
 
     public void tick() {
         super.tick();
-        if (this.level().isClientSide) {
-            this.clientTick();
-        }
+        //if (this.level().isClientSide) {
+       //     this.clientTick();
+        //}
     }
 
     public void aiStep() {
@@ -67,8 +68,8 @@ extends PathfinderMob {
         }
     }
 
-    public void clientTick() {
-    }
+    //public void clientTick() {
+    //}
 
     protected void clientAiStep() {
     }
@@ -89,12 +90,20 @@ extends PathfinderMob {
         return super.hurt(pSource, pAmount);
     }
 
+    public void setMainHandItem(ItemStack pItem) {
+        this.setItemSlot(EquipmentSlot.MAINHAND, pItem);
+    }
+
     public void setMainHandItem(Item pItem) {
-        this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(pItem));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(pItem));
+    }
+
+    public void setOffHandItem(ItemStack pItem) {
+        this.setItemSlot(EquipmentSlot.OFFHAND, pItem);
     }
 
     public void setOffHandItem(Item pItem) {
-        this.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(pItem));
+        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(pItem));
     }
 
     public void handleEntityEvent(byte p_21375_) {
@@ -113,13 +122,17 @@ extends PathfinderMob {
             attribute.removeModifier(pM);
     }
 
+    public boolean closerThan(Vec3 pPos, double pRange) {
+        return this.distanceToSqr(pPos) <= pRange * pRange;
+    }
+
     public boolean isServerSide() {
         return !this.level().isClientSide;
     }
 
     public void sendSystemMessage(Component pMessage) {
-        if (this.level() instanceof ServerLevel level) {
-            level.getServer().getPlayerList().broadcastSystemMessage(pMessage, false);
+        if (this.isServerSide()) {
+            serverLevel().getServer().getPlayerList().broadcastSystemMessage(pMessage, false);
         } else {
             Minecraft.getInstance().gui.getChat().addMessage(pMessage);
         }
@@ -133,22 +146,22 @@ extends PathfinderMob {
     }
 
     public double x() {
-        return this.getX();
+        return this.position().x;
     }
 
     public double y() {
-        return this.getY();
+        return this.position().y;
     }
 
     public double z() {
-        return this.getZ();
+        return this.position().z;
     }
 
-    public ServerLevel getServerLevel() {
+    public ServerLevel serverLevel() {
         return (ServerLevel)this.level();
     }
 
-    public ClientLevel getClientLevel() {
+    public ClientLevel clientLevel() {
         return (ClientLevel)this.level();
     }
 
@@ -286,7 +299,8 @@ extends PathfinderMob {
         if (p_33038_.getItem() instanceof ProjectileWeaponItem) {
             Predicate<ItemStack> predicate = ((ProjectileWeaponItem)p_33038_.getItem()).getSupportedHeldProjectiles();
             ItemStack itemstack = ProjectileWeaponItem.getHeldProjectile(this, predicate);
-            return ForgeHooks.getProjectile(this, p_33038_, itemstack.isEmpty() ? new ItemStack(Items.ARROW) : itemstack);
+            return ForgeHooks.getProjectile(this, p_33038_, itemstack.isEmpty() ? new ItemStack(Items.ARROW) :
+                    itemstack);
         } else {
             return ForgeHooks.getProjectile(this, p_33038_, ItemStack.EMPTY);
         }

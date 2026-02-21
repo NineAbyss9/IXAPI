@@ -8,5 +8,5 @@ import java.lang.annotation.RetentionPolicy;
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 public @interface Message {
-    String value();
+    java.lang.String value();
 }

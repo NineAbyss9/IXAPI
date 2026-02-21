@@ -1,7 +1,7 @@
 
 package org.NineAbyss9.util;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nullable;
 
 public class ValueHolder {
     public static final String EMPTY = "";
@@ -12,12 +12,11 @@ public class ValueHolder {
      *@see Option#orElse(Object)
      *
      * @return {@code mayNull} if it is not null, otherwise returns {@code other}*/
-    public static <R> R nullToOther(R mayNull, R other) {
+    public static <R> R nullToOther(@Nullable R mayNull, R other) {
         return mayNull == null ? other : mayNull;
     }
 
     @SuppressWarnings("all")
-    @NotNull
     public static <T> T nullOf() {
         return null;
     }

@@ -9,7 +9,7 @@ extends SubLister<E> {
     @java.io.Serial
     private static final long serialVersionUID = 5322653187890826517L;
     transient final E[] array;
-    @SafeVarargs
+    @java.lang.SafeVarargs
     ImmutableSubLister(E... elements) {
         super();
         array = elements;
@@ -92,7 +92,7 @@ extends SubLister<E> {
         return null;
     }
 
-    @SafeVarargs
+    @java.lang.SafeVarargs
     public static <E> ImmutableSubLister<E> of(E... elements) {
         return new ImmutableSubLister<>(elements);
     }

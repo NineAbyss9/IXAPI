@@ -1,8 +1,11 @@
 
 package org.NineAbyss9.util.lister;
 
+import org.NineAbyss9.value_holder.BooleanValueHolder;
+
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class SubLister<E>
 extends LinkedList<E>
@@ -17,10 +20,17 @@ implements Lister<E> {
         super(c);
     }
 
-    public boolean apply(int index, Consumer<? super E> action) {
-        E element = this.get(index);
-        action.accept(element);
+    public BooleanValueHolder<E> addValue(E pValue) {
+        return new BooleanValueHolder<>(this.add(pValue), pValue);
+    }
+
+    public boolean accept(int index, Consumer<? super E> action) {
+        action.accept(this.get(index));
         return true;
+    }
+
+    public <R> R apply(int index, Function<E, R> fun) {
+        return fun.apply(this.get(index));
     }
 
     public boolean ifPresent(int index, Consumer<? super E> action) {
@@ -32,11 +42,7 @@ implements Lister<E> {
         return false;
     }
 
-    public ImmutableSubLister<E> immutable() {
-        return new ImmutableSubLister<>(this);
-    }
-
-    @SafeVarargs
+    @java.lang.SafeVarargs
     public static <E> SubLister<E> of(E... elements) {
         return new SubLister<>(Arrays.asList(elements));
     }

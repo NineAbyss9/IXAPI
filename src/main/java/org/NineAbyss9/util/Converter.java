@@ -9,4 +9,8 @@ public final class Converter {
     public <T> T convert(Object a) {
         return (T)a;
     }
+
+    public <T> T convert(Object obj, Class<T> clazz) {
+        return clazz.cast(obj);
+    }
 }

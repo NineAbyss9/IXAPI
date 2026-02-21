@@ -5,7 +5,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 public interface IShieldUser {
-    void disableShield(boolean flag);
+    boolean isUsingShield();
+
+    void setUsingShield(boolean using);
+
+    boolean isShieldOnCooldown();
+
+    void disableShield(boolean pBecauseOfAxe);
 
     static void hurtShield(LivingEntity entity, int percent) {
         ItemStack stack = entity.getUseItem();

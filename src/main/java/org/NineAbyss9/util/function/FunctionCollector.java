@@ -3,6 +3,7 @@ package org.NineAbyss9.util.function;
 
 import org.NineAbyss9.util.IXUtil;
 
+import javax.annotation.Nullable;
 import java.util.function.*;
 
 public class FunctionCollector {
@@ -10,6 +11,7 @@ public class FunctionCollector {
         throw new AssertionError();
     }
 
+    /**{@linkplain Predicate}*/
     public static <T> Predicate<T> alwaysTrue() {
         return PredicateInstance.ALWAYS_TRUE.convert();
     }
@@ -26,12 +28,36 @@ public class FunctionCollector {
         return PredicateInstance.IS_NULL.convert();
     }
 
+    /**{@linkplain Supplier}*/
     public static BooleanSupplier positiveSupplier() {
         return BooleanSupplierInstance.TRUE;
     }
 
     public static BooleanSupplier negativeSupplier() {
         return BooleanSupplierInstance.FALSE;
+    }
+
+    public static <T> T get(Supplier<T> supplier) {
+        return supplier.get();
+    }
+
+    public static <T> Supplier<T> supplier(T value) {
+        return () -> value;
+    }
+
+    /**{@linkplain Runnable}*/
+    public static Runnable emptyAction() {
+        return () -> {};
+    }
+
+    /**{@linkplain Consumer}*/
+    public static <T> Consumer<T> accept() {
+        return obj -> {};
+    }
+
+    public static <T> void accept(@Nullable T obj, Consumer<T> action) {
+        if (obj != null)
+            action.accept(obj);
     }
 
     private enum BooleanSupplierInstance implements BooleanSupplier {
