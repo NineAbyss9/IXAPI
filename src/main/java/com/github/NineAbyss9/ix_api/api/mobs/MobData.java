@@ -36,9 +36,12 @@ public class MobData {
         this.synchronizer = sync;
     }
 
-    @Unused
     public boolean isInEnd() {
         return mob.level().dimension() == Level.END;
+    }
+
+    public boolean isInOverWorld() {
+        return this.mob.level().dimension() == Level.OVERWORLD;
     }
 
     public DifficultyInstance getDifficultyInstance() {

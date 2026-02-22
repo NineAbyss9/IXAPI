@@ -175,6 +175,10 @@ extends PathfinderMob {
         }
     }
 
+    public MobData getMobData() {
+        return mobData;
+    }
+
     @SuppressWarnings("deprecation")
     public boolean isPushedByFluid() {
         return super.isPushedByFluid();
