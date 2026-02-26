@@ -36,7 +36,7 @@ public class NineAbyssBase //implements AutoCloseable
     }
 
     public int hashCode() {
-        return 9;
+        return Integer.valueOf('\u7396');
     }
 
     @NotCheck

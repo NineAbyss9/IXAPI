@@ -72,7 +72,6 @@ implements Map.Entry<L, R>, Comparable<Pair<L, R>>, java.io.Serializable {
         return MutablePair.of(left, right);
     }
 
-    @SuppressWarnings("unchecked")
     public static <K, V> Pair<K, V> empty() {
         return new EmptyPair<>();
     }

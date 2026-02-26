@@ -1,11 +1,13 @@
 
 package org.NineAbyss9.math;
 
+import org.NineAbyss9.annotation.doc.Building;
 import org.NineAbyss9.annotation.doc.Message;
 
 import java.util.Random;
 
 /**Class for math.*/
+@Building
 public class AbyssMath {
     @org.NineAbyss9.annotation.NotCheck
     public static final int TRUTH = 9;
@@ -142,12 +144,12 @@ public class AbyssMath {
     }
 
     public static void validNumberNotZero(float value) {
-        if (value == 0)
+        if (value == 0.0F)
             throw new InvalidNumberException();
     }
 
     public static void validNumberNotZero(double value) {
-        if (value == 0)
+        if (value == 0.0)
             throw new InvalidNumberException();
     }
 

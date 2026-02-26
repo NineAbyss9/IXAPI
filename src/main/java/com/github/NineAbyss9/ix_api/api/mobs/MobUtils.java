@@ -355,9 +355,9 @@ public record MobUtils(Entity entity) {
                 BlockState hitBlock = entity.level().getBlockState(hitResult.getBlockPos());
                 if (hitBlock.getBlock() instanceof SlabBlock && hitBlock.getValue(BlockStateProperties.SLAB_TYPE)
                         == SlabType.BOTTOM) {
-                    entity.setPos(entity.getX(), hitResult.getBlockPos().getY() + 1.0625F - 0.5f, entity.getZ());
+                    entity.setPos(entity.getX(), hitResult.getBlockPos().getY() + 1.0625 - 0.5, entity.getZ());
                 } else {
-                    entity.setPos(entity.getX(), hitResult.getBlockPos().getY() + 1.0625F, entity.getZ());
+                    entity.setPos(entity.getX(), hitResult.getBlockPos().getY() + 1.0625, entity.getZ());
                 }
             }
         }
@@ -375,7 +375,7 @@ public record MobUtils(Entity entity) {
     }
 
     public static BlockHitResult rayTrace(Entity mob, double distance, boolean fluids) {
-        return (BlockHitResult) mob.pick(distance, 1.0F, fluids);
+        return (BlockHitResult)mob.pick(distance, 1.0F, fluids);
     }
 
     public static boolean hasLineOfSight(Entity looker, Entity target) {

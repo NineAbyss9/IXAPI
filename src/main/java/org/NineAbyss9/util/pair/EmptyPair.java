@@ -2,7 +2,6 @@
 package org.NineAbyss9.util.pair;
 
 final class EmptyPair<L, R> extends Pair<L, R> {
-
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 

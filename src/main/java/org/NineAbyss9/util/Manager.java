@@ -1,12 +1,15 @@
 
 package org.NineAbyss9.util;
 
+import org.NineAbyss9.annotation.doc.Building;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+@Building
 public final class Manager {
     private static final StackWalker WALKER;
     private final Class<?> owner;
