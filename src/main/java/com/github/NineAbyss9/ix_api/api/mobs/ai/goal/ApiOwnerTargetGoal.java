@@ -35,7 +35,7 @@ public class ApiOwnerTargetGoal extends TargetGoal {
                 LivingEntity lie = m.getTarget();
                 if (lie != null) {
                     this.mob.setTarget(lie);
-                    ((Ownable) this.mob).setTargetByOwner();
+                    ownable.setTargetByOwner();
                 }
             } else {
                 throw new IllegalArgumentException(this.toString());
