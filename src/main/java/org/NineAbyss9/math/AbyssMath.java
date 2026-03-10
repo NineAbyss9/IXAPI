@@ -4,6 +4,7 @@ package org.NineAbyss9.math;
 import org.NineAbyss9.annotation.doc.Building;
 import org.NineAbyss9.annotation.doc.Message;
 
+import java.math.BigDecimal;
 import java.util.Random;
 
 /**Class for math.*/
@@ -59,13 +60,24 @@ public class AbyssMath {
         return toThePowerOf(root, (float)index);
     }
 
-    public static float toThePowerOf(float root, float index) {
-        float base = root;
-        int cache = 0;
-        for (;cache < index;cache++)
-            base *= root;
-        base += negate((float)cache - index) * root;
-        return base;
+    public static float toThePowerOf(float root, float index) {return toThePowerOf(root, index, false);}
+
+    public static float toThePowerOf(float root, float index, boolean precise) {
+        if (precise) {
+            BigDecimal base = BigDecimal.valueOf(root);
+            BigDecimal bigRoot = BigDecimal.valueOf(root);
+            int cache = 0;
+            for (;cache < index;cache++)
+                base = base.multiply(bigRoot);
+            return base.floatValue();
+        } else {
+            float base = root;
+            int cache = 0;
+            for (;cache < index;cache++)
+                base *= root;
+            base += negate((float)cache - index) * root;
+            return base;
+        }
     }
 
     public static int negate(int value) {

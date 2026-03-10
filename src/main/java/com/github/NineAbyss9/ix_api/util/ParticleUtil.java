@@ -48,7 +48,7 @@ public record ParticleUtil(Entity entity) {
 
     @ClientOnly
     public void randomAddParticle(ParticleOptions options, double pXS, double pYS, double pZS) {
-        this.randomAddParticle(options, 0.8,0.8,
+        this.randomAddParticle(options, 0.8d,0.8d,
                 pXS, pYS, pZS);
     }
 
@@ -61,9 +61,9 @@ public record ParticleUtil(Entity entity) {
     public static void addParticleAroundSelf(Entity entity, ParticleOptions options, int count) {
         if (!entity.level().isClientSide()) {
             ServerLevel level = (ServerLevel)entity.level();
-            double x = level.getRandom().nextGaussian() * 0.05;
+            double x = level.getRandom().nextGaussian() * 0.05d;
             level.sendParticles(options, entity.getX(), entity.getRandomY(), entity.getZ(), count,
-                    1.5, 2, 1.5, x);
+                    1.5d, 2d, 1.5d, x);
         }
     }
 
@@ -73,7 +73,7 @@ public record ParticleUtil(Entity entity) {
             double rx = entity.getRandomX(x);
             double y = entity.getRandomY();
             double rz = entity.getRandomZ(z);
-            entity.level().addParticle(options, rx, y, rz, 0, 0, 0);
+            entity.level().addParticle(options, rx, y, rz, 0d, 0d, 0d);
         }
     }
 
@@ -97,7 +97,7 @@ public record ParticleUtil(Entity entity) {
     @ServerOnly
     public static void explode(ServerLevel level, Vec3 position) {
         level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, position.x(), position.y(), position.z(), 1,
-                0, 0, 0, 0);
+                0d, 0d, 0d, 0d);
     }
 
     @ClientOnly
@@ -117,7 +117,7 @@ public record ParticleUtil(Entity entity) {
     @ServerOnly
     public static void serverAddParticle(ServerLevel serverLevel, ParticleOptions options, Vec3 pos) {
         serverLevel.sendParticles(options, pos.x, pos.y, pos.z,
-                1, 0, 0, 0, 0);
+                1, 0d, 0d, 0d, 0d);
     }
 
     @ServerOnly
@@ -128,15 +128,15 @@ public record ParticleUtil(Entity entity) {
     public static void spawnAnim(Entity entity, ParticleOptions options, int count) {
         AABB aabb = entity.getBoundingBox();
         sendParticles((ServerLevel)entity.level(), options, entity.position(), count,
-                aabb.getXsize() - 0.2, aabb.getYsize(), aabb.getZsize() - 0.2,
-                MathSupport.random.nextGaussian() * 0.02);
+                aabb.getXsize() - 0.2d, aabb.getYsize(), aabb.getZsize() - 0.2d,
+                MathSupport.random.nextGaussian() * 0.02d);
     }
 
     @ClientOnly
     public static void spawnAnim(ParticleOptions options, Level level, Entity pos) {
         for (int i = 0;i < 20;i++) {
-            level.addParticle(options, pos.getRandomX(1), pos.getRandomY(), pos.getRandomZ(1),
-                    0, 0, 0);
+            level.addParticle(options, pos.getRandomX(1d), pos.getRandomY(), pos.getRandomZ(1d),
+                    0d, 0d, 0d);
         }
     }
 
@@ -156,11 +156,11 @@ public record ParticleUtil(Entity entity) {
     }
 
     public static void addBlockParticle(Level pLevel, BlockPos pPos, double pX, double pY, double pZ) {
-        addBlockParticle(pLevel, pPos, pX, pY, pZ, AbyssMath.random(0.3), 0.2, AbyssMath.random(0.3));
+        addBlockParticle(pLevel, pPos, pX, pY, pZ, AbyssMath.random(0.3d), 0.2d, AbyssMath.random(0.3d));
     }
 
     public static void addBlockParticle(Level pLevel, BlockPos pPos) {
-        addBlockParticle(pLevel, pPos, pPos.getX() + 0.5, pPos.getY(), pPos.getZ() + 0.5);
+        addBlockParticle(pLevel, pPos, pPos.getX() + 0.5d, pPos.getY(), pPos.getZ() + 0.5d);
     }
 
     public static ParticleOptions getItemParticleOption(ItemStack stackIn) {

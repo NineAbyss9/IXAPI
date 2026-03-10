@@ -21,7 +21,6 @@ public class GoToLivingGoal extends Goal {
         this.targetType = type;
     }
 
-    @Override
     public boolean canUse() {
         if (this.mob.getMoveControl().hasWanted()) {
             return false;
@@ -29,7 +28,6 @@ public class GoToLivingGoal extends Goal {
         return this.checkCanUse();
     }
 
-    @Override
     public void start() {
         if (this.targetEntity != null && this.targetEntity != this.mob) {
             this.mob.getNavigation().moveTo(this.targetEntity, this.speedModifier);
@@ -37,7 +35,6 @@ public class GoToLivingGoal extends Goal {
         this.stop();
     }
 
-    @Override
     public boolean canContinueToUse() {
         return false;
     }

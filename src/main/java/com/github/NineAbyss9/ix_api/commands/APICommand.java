@@ -11,6 +11,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -81,14 +82,22 @@ public class APICommand {
                                                                 IntegerArgumentType.getInteger(commandContext, "level"))))))))
                 .then(Commands.literal("enchanter")
                         .then(Commands.argument("type", ResourceArgument.resource(p_250122_,
-                                Registries.ENCHANTMENT))
+                                        Registries.ENCHANTMENT))
                                 .then(Commands.argument("level", IntegerArgumentType.integer(0,
                                         Integer.MAX_VALUE)).executes(commandContext -> {
                                     CommandEnchanter.enchant(commandContext.getSource(), ResourceArgument.getResource(
                                             commandContext, "type", Registries.ENCHANTMENT), IntegerArgumentType.getInteger(
                                             commandContext, "level"));
                                     return 1;
-                                })))));
+                                }))))
+                .then(Commands.literal("summoner")
+                        .then(Commands.argument("type", ResourceArgument.resource(p_250122_,
+                                        Registries.ENTITY_TYPE))
+                                .then(Commands.argument("pos", Vec3Argument.vec3())
+                                        .executes(commandContext -> CommandSummoner.summon(
+                                                commandContext.getSource(), ResourceArgument.getEntityType(commandContext,
+                                                        "type").get(), commandContext.getSource().getLevel(), Vec3Argument
+                                                        .getVec3(commandContext, "pos")))))));
     }
 
     private static int throwNew() {

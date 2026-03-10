@@ -18,17 +18,14 @@ public class NormalCastingSpellGoal extends Goal {
         this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
     }
 
-    @Override
     public boolean canUse() {
         return this.caster.isCastingSpell();
     }
 
-    @Override
     public void start() {
         this.looker.getNavigation().stop();
     }
 
-    @Override
     public void tick() {
         LivingEntity entity = this.looker.getTarget();
         if (entity != null) {
@@ -36,7 +33,6 @@ public class NormalCastingSpellGoal extends Goal {
         }
     }
 
-    @Override
     public void stop() {
         this.caster.stopSpell();
     }

@@ -22,8 +22,6 @@ extends MoveToBlockGoal {
         this.blocks = validBlocks;
     }
 
-
-
     protected boolean isValidTarget(LevelReader pLevel, BlockPos pPos) {
         boolean flag = false;
         for (Block block : blocks) {

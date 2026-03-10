@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
  * @author Player_IX*/
 @PFMAreNonnullByDefault
 public class MutableVec3 implements Position {
-    public static final MutableVec3 ZERO = new MutableVec3(0, 0, 0);
+    public static final MutableVec3 ZERO = new MutableVec3(0d, 0d, 0d);
     private double x;
     private double y;
     private double z;

@@ -27,6 +27,14 @@ public final class Vec9 extends Vec3 {
         return new MutableVec3(x, y, z);
     }
 
+    public BlockPos toBlockPos() {
+        return BlockPos.containing(this);
+    }
+
+    public BlockPos.MutableBlockPos toMutableBlockPos() {
+        return BlockPos.containing(this).mutable();
+    }
+
     public static CompoundTag createVec3Tag(Vec3 vec3, String main) {
         CompoundTag tag = new CompoundTag();
         tag.putDouble(main + "X", vec3.x);
@@ -50,14 +58,14 @@ public final class Vec9 extends Vec3 {
         double yDPower = target.getY() - entity.getY();
         double zDPower = target.getZ() - entity.getZ();
         double d = Math.sqrt(xDPower * xDPower + yDPower * yDPower + zDPower * zDPower);
-        double xPower = -(xDPower / d * 5.0 * speed);
-        double yPower = -(yDPower / d * 5.0 * speed);
-        double zPower = -(zDPower / d * 5.0 * speed);
+        double xPower = -(xDPower / d * 5.0d * speed);
+        double yPower = -(yDPower / d * 5.0d * speed);
+        double zPower = -(zDPower / d * 5.0d * speed);
         return new Vec9(xPower, yPower, zPower);
     }
 
     public static Vec9 of() {
-        return new Vec9(0.0, 0.0, 0.0);
+        return new Vec9(0.0D, 0.0D, 0.0D);
     }
 
     public static Vec9 of(double x, double y, double z) {
@@ -66,7 +74,7 @@ public final class Vec9 extends Vec3 {
 
     @Message("Already added.")
     public static Vec9 of(BlockPos pos) {
-        return new Vec9(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+        return new Vec9(pos.getX() + 0.5d, pos.getY(), pos.getZ() + 0.5d);
     }
 
     public static Vec9 of(MutableVec3 vec3) {
