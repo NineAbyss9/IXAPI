@@ -37,7 +37,7 @@ public record ParticleUtil(Entity entity) {
 
     @ClientOnly
     public static void addParticle(Level level, ParticleOptions options, BlockPos pos, double xs, double ys, double zs) {
-        level.addParticle(options, pos.getX(), pos.getY(), pos.getZ(), xs, ys, zs);
+        level.addParticle(options, pos.getX() + 0.5d, pos.getY(), pos.getZ() + 0.5d, xs, ys, zs);
     }
 
     @ClientOnly

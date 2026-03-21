@@ -1,8 +1,10 @@
 
 package org.NineAbyss9.codec;
 
+import org.NineAbyss9.annotation.doc.Building;
 import org.NineAbyss9.code.Code;
 
+@Building
 public interface Codec extends Decoder, Encoder {
     Codec field(String st);
 

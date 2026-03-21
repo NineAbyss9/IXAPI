@@ -1,7 +1,7 @@
 
 package org.NineAbyss9.util.function;
 
-import org.NineAbyss9.util.IXUtil;
+import org.NineAbyss9.util.*;
 
 import javax.annotation.Nullable;
 import java.util.function.*;
@@ -73,7 +73,7 @@ public class FunctionCollector {
         }
     }
 
-    private enum PredicateInstance implements Predicate<Object>, org.NineAbyss9.util.IXUtilUser {
+    private enum PredicateInstance implements Predicate<Object>, IXUtilUser {
         ALWAYS_TRUE {
             public boolean test(Object t) {
                 return true;

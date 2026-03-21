@@ -161,7 +161,7 @@ public class AbyssMath {
     }
 
     public static void validNumberNotZero(double value) {
-        if (value == 0.0)
+        if (value == 0.0D)
             throw new InvalidNumberException();
     }
 
@@ -190,8 +190,9 @@ public class AbyssMath {
         return random.nextBoolean() ? 1 : 0;
     }
 
+    /**@return If a random bool is true, returns 1, else -1*/
     public static int trueOrFalse() {
-        return random.nextBoolean() ? 1 : negate(1);
+        return random.nextBoolean() ? 1 : -1;
     }
 
     public static float trueOrFalse(float value) {
