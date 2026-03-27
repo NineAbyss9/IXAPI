@@ -31,8 +31,8 @@ public class NineAbyssBase //implements AutoCloseable
         return Cache.getInstance();
     }
 
-    protected Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException();
+    protected java.lang.Object clone() throws java.lang.CloneNotSupportedException {
+        throw new java.lang.CloneNotSupportedException();
     }
 
     public int hashCode() {

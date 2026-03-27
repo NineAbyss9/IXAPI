@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 import java.util.function.*;
 
 public class FunctionCollector {
+    public static final Runnable EMPTY_ACTION = () -> {};
+    public static final Consumer<Object> EMPTY_CONSUMER = (obj) -> {};
     private FunctionCollector() {
         throw new AssertionError();
     }
@@ -47,12 +49,12 @@ public class FunctionCollector {
 
     /**{@linkplain Runnable}*/
     public static Runnable emptyAction() {
-        return () -> {};
+        return EMPTY_ACTION;
     }
 
     /**{@linkplain Consumer}*/
     public static <T> Consumer<T> accept() {
-        return obj -> {};
+        return IXUtil.c.convert(EMPTY_CONSUMER);
     }
 
     public static <T> void accept(@Nullable T obj, Consumer<T> action) {

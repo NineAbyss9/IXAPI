@@ -62,10 +62,7 @@ implements Map.Entry<L, R>, Comparable<Pair<L, R>>, java.io.Serializable {
     }
 
     public String toString() {
-        return "Pair{" +
-                "left:" + left() +
-                ", right:" + right() +
-                '}';
+        return "Pair{" + "left:" + this.left() + ", right:" + this.right() + "}";
     }
 
     public static <L, R> Pair<L, R> mutable(L left, R right) {
