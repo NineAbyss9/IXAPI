@@ -5,7 +5,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.NineAbyss9.annotation.doc.Building;
 
+@Building
 public class TipScreen
 extends Screen {
     private ResourceLocation location;

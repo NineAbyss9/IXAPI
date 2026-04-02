@@ -6,16 +6,14 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
-import javax.annotation.Nonnull;
-
 public interface IProjectile {
-    void onHit(HitResult result);
+    void onHit(HitResult pResult);
 
-    void onHitEntity(EntityHitResult p_37259_);
+    void onHitEntity(EntityHitResult pResult);
 
-    void onHitBlock(BlockHitResult p_37258_);
+    void onHitBlock(BlockHitResult pResult);
 
-    default boolean canHitEntity(@Nonnull Entity p_37250_) {
+    default boolean canHitEntity(Entity pEntity) {
         return true;
     }
 }

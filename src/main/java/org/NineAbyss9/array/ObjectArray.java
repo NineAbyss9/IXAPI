@@ -93,7 +93,6 @@ implements Iterable<E>, IXUtilUser //, java.io.Serializable
      */
     public <V> V convert(int pIndex) throws ClassCastException
     {
-        System.out.println();
         return IXUtil.c.convert(this.get(pIndex));
     }
 
@@ -120,8 +119,10 @@ implements Iterable<E>, IXUtilUser //, java.io.Serializable
 
     public void foreach(Consumer<? super E> action)
     {
-        for (E element : this) {
-            action.accept(element);
+        var it = iterator();
+        while (it.hasNext())
+        {
+            action.accept(it.next());
         }
     }
 

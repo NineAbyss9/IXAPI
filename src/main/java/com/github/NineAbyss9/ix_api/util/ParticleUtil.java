@@ -156,15 +156,20 @@ public record ParticleUtil(Entity entity) {
     }
 
     public static void addBlockParticle(Level pLevel, BlockPos pPos, double pX, double pY, double pZ) {
-        addBlockParticle(pLevel, pPos, pX, pY, pZ, AbyssMath.random(0.3d), 0.2d, AbyssMath.random(0.3d));
+        addBlockParticle(pLevel, pPos, pX, pY, pZ, AbyssMath.random(0.3D), 0.2D, AbyssMath.random(0.3D));
     }
 
     public static void addBlockParticle(Level pLevel, BlockPos pPos) {
-        addBlockParticle(pLevel, pPos, pPos.getX() + 0.5d, pPos.getY(), pPos.getZ() + 0.5d);
+        addBlockParticle(pLevel, pPos, pPos.getX() + 0.5D, pPos.getY(), pPos.getZ() + 0.5D);
     }
 
     public static ParticleOptions getItemParticleOption(ItemStack stackIn) {
         return new ItemParticleOption(ParticleTypes.ITEM, stackIn);
+    }
+
+    public static BlockParticleOption getBlockParticleOption(Level pLevel, BlockPos pPos)
+    {
+        return new BlockParticleOption(ParticleTypes.BLOCK, pLevel.getBlockState(pPos));
     }
 
     public static ParticleOptions getFromSupplier(Supplier<ParticleOptions> supplier) {

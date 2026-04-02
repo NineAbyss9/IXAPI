@@ -126,12 +126,14 @@ extends TraceableEntity, OwnableEntity {
         if (this.getOwner() != null) {
             tag.putString("Owner", this.getOwner().getDisplayName().getString());
         }
+        tag.putBoolean("Hostile", this.isHostile());
     }
 
     default void readOwnableAdditionalSaveData(CompoundTag tag) {
         if (tag.hasUUID("OwnerUUID")) {
             this.setOwnerUUID(tag.getUUID("OwnerUUID"));
         }
+        this.setHostile(tag.getBoolean("Hostile"));
     }
 
     default void ownableTick() {

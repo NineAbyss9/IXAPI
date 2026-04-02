@@ -1,6 +1,8 @@
 
 package org.NineAbyss9.util;
 
+import org.NineAbyss9.util.function.Holder;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Stream;
@@ -18,7 +20,7 @@ import java.util.stream.Stream;
  * @author NineAbyss*/
 @SuppressWarnings("unused")
 public final class Option<T>
-implements Supplier<T>, java.io.Serializable {
+implements Holder<T>, java.io.Serializable {
     //SerialVersion
     @java.io.Serial
     private static final long serialVersionUID = 6561243608026846372L;
@@ -64,27 +66,6 @@ implements Supplier<T>, java.io.Serializable {
     }
 
     /**
-     * If a value is present, returns the value, otherwise throws
-     * {@code NoSuchElementException}.
-     *
-     * @return the non-{@code null} value described by this {@code Optional}
-     * @throws NoSuchElementException if no value is present
-     */
-    public T orElseThrow() {
-        if (isEmpty())
-            throw new NoSuchElementException("No value present");
-        return this.value;
-    }
-
-    /**@see Optional#orElseThrow(Supplier)*/
-    public <X extends Throwable> T orElseThrow(Supplier<X> x) throws X {
-        if (isPresent())
-            return value;
-        else
-            throw x.get();
-    }
-
-    /**
      * If a value is present, returns the value, otherwise returns
      * {@code other}.
      *
@@ -92,7 +73,8 @@ implements Supplier<T>, java.io.Serializable {
      *        May be {@code null}.
      * @return the value, if present, otherwise {@code other}
      */
-    public T orElse(T other) {
+    public T orElse(T other)
+    {
         if (this.isPresent())
             return value;
         else
@@ -118,14 +100,16 @@ implements Supplier<T>, java.io.Serializable {
      *
      * @return the value, if present, otherwise {@code other}
      */
-    public T ifOrElse(boolean flag, T other) {
+    public T ifOrElse(boolean flag, T other)
+    {
         if (flag)
             return this.value;
         else
             return other;
     }
 
-    public T ifOrElseThrow(boolean flag, Supplier<Throwable> exception) throws Throwable {
+    public T ifOrElseThrow(boolean flag, Supplier<Throwable> exception)
+    throws Throwable {
         if (flag)
             return this.value;
         else
@@ -227,15 +211,5 @@ implements Supplier<T>, java.io.Serializable {
             return f.isNaN();
         else
             return false;
-    }
-
-    /**@see Optional#isPresent() */
-    public boolean isPresent() {
-        return value != null;
-    }
-
-    /**@see Optional#isEmpty() */
-    public boolean isEmpty() {
-        return value == null;
     }
 }

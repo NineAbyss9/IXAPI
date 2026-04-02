@@ -2,6 +2,7 @@
 package com.github.NineAbyss9.ix_api.network.packet;
 
 import com.github.NineAbyss9.ix_api.IXApi;
+import com.github.NineAbyss9.ix_api.api.annotation.MaybeDeprecated;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -12,6 +13,8 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+/**Based on polar's code*/
+@MaybeDeprecated
 public class BossBarUpdatePacket {
     private final UUID uuid;
     private final int boss;

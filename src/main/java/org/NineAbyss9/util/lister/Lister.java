@@ -10,7 +10,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.random.RandomGenerator;
 
-public interface Lister<E> extends List<E>, Deque<E>, IXUtilUser {
+public interface Lister<E> extends List<E>, Deque<E>, IXUtilUser
+{
     boolean accept(int index, Consumer<? super E> action);
 
     <R> R apply(int index, Function<E, R> fun);
@@ -35,8 +36,10 @@ public interface Lister<E> extends List<E>, Deque<E>, IXUtilUser {
 
     BooleanValueHolder<E> addValue(E pValue);
 
-    default void ifNotEmpty(Consumer<? super E> pAction) {
-        if (!isEmpty()) {
+    default void ifNotEmpty(Consumer<? super E> pAction)
+    {
+        if (!isEmpty())
+        {
             Iterator<E> iterator = iterator();
             while (iterator.hasNext())
                 pAction.accept(iterator.next());
@@ -45,7 +48,7 @@ public interface Lister<E> extends List<E>, Deque<E>, IXUtilUser {
 
     boolean contains(Object obj);
 
-    /**Gets a sample of a {@code SubLister}*/
+    /**Gets a sample of a {@code Lister}*/
     default E sample(RandomGenerator random) {
         return this.get(random.nextInt(size() - 1));
     }

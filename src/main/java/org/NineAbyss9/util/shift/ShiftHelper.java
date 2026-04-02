@@ -15,7 +15,7 @@ public class ShiftHelper {
 
     /**
      *
-     * @return pValue * 2<sup>n</sup>*/
+     * @return pValue / 2<sup>n</sup>*/
     public static int rightShift(int pValue, int pIndex) {
         return pValue / AbyssMath.toThePowerOf(2, pIndex);
     }

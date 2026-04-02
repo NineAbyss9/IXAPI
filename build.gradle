@@ -17,14 +17,14 @@ java {
     //withSourcesJar()
 }
 
-/tasks.configureEach { task ->
+tasks.configureEach { task ->
     if (task.name == 'reobf') {
         task.enabled = false
     }
     if (task.name.startsWith('reobf')) {
         task.enabled = false
     }
-}/
+}
 
 minecraft {
     // The mappings can be changed at any time and must be in the following format.

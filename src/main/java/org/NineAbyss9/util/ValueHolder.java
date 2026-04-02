@@ -11,7 +11,8 @@ public class ValueHolder {
      *
      *@see Option#orElse(Object)
      *
-     * @return {@code mayNull} if it is not null, otherwise returns {@code other}*/
+     * @return {@code mayNull} if it is not null, otherwise returns {@code other}.<p></p>
+     * Maybe null if {@code other} is still null.*/
     public static <R> R nullToOther(@Nullable R mayNull, R other) {
         return mayNull == null ? other : mayNull;
     }

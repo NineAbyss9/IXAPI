@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 public class Instance<T> implements Supplier<T> {
     private final T object;
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"unchecked"})
     public static final Instance NULL = new Instance(null);
     public Instance(T pObj) {
         object = pObj;
