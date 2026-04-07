@@ -49,12 +49,12 @@ extends PathfinderMob {
         this.entityData.define(DATA_BABY, false);
     }
 
-    public void tick() {
+    /*public void tick() {
         super.tick();
-        //if (this.level().isClientSide) {
-       //     this.clientTick();
-        //}
-    }
+        if (this.level().isClientSide) {
+            this.clientTick();
+        }
+    }*/
 
     public void aiStep() {
         this.updateSwingTime();
@@ -142,6 +142,10 @@ extends PathfinderMob {
             return;
         }
         super.setPos(pX, pY, pZ);
+    }
+
+    public float getAttackDamage() {
+        return (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
     }
 
     public double x() {

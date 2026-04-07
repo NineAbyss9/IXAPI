@@ -18,6 +18,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.NineAbyss9.NineAbyssBase;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
@@ -31,6 +32,7 @@ public class IXApi implements ModOfNineAbyss {
     public static ApiAgent AGENT;
 
     public IXApi(FMLJavaModLoadingContext context) {
+        NineAbyssBase.setup();
         AGENT = DistExecutor.unsafeRunForDist(()-> ClientAgent::new, ()-> ServerAgent::new);
         IEventBus modEventBus = context.getModEventBus();
         modEventBus.addListener(this::addTabs);

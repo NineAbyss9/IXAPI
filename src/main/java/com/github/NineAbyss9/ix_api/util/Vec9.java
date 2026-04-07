@@ -72,7 +72,7 @@ public final class Vec9 extends Vec3 {
         return new Vec9(x, y, z);
     }
 
-    @Message("Already added.")
+    @Message("Already added")
     public static Vec9 of(BlockPos pos) {
         return new Vec9(pos.getX() + 0.5d, pos.getY(), pos.getZ() + 0.5d);
     }

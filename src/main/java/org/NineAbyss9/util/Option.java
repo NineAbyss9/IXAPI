@@ -60,54 +60,6 @@ implements Holder<T>, java.io.Serializable {
         return this.value;
     }
 
-    /**@see Optional#orElseGet(Supplier) */
-    public T orElseGet(Supplier<T> supplier) {
-        return value != null ? value : supplier.get();
-    }
-
-    /**
-     * If a value is present, returns the value, otherwise returns
-     * {@code other}.
-     *
-     * @param other the value to be returned, if no value is present.
-     *        May be {@code null}.
-     * @return the value, if present, otherwise {@code other}
-     */
-    public T orElse(T other)
-    {
-        if (this.isPresent())
-            return value;
-        else
-            return other;
-    }
-
-    /**
-     * If a value is present, returns the value, otherwise returns
-     * {@code null}.
-     *
-     * @return the value, if present, otherwise {@code null}
-     */
-    public T getIf(boolean flag) {
-        return ifOrElse(flag, null);
-    }
-
-    /**
-     * If a {@code flag} is {@code true} returns the value, otherwise returns
-     * {@code  other}.
-     *
-     * @param other the value to be returned, if no value is present.
-     * May be {@code null}.
-     *
-     * @return the value, if present, otherwise {@code other}
-     */
-    public T ifOrElse(boolean flag, T other)
-    {
-        if (flag)
-            return this.value;
-        else
-            return other;
-    }
-
     public T ifOrElseThrow(boolean flag, Supplier<Throwable> exception)
     throws Throwable {
         if (flag)
@@ -124,20 +76,6 @@ implements Holder<T>, java.io.Serializable {
     public void run(Consumer<? super T> consumer)
     throws NullPointerException {
         consumer.accept(value);
-    }
-
-    /**@see Optional#ifPresent(Consumer)*/
-    public void ifPresent(Consumer<? super T> consumer) {
-        if (isPresent())
-            consumer.accept(value);
-    }
-
-    /**@see Optional#ifPresentOrElse(Consumer, Runnable)*/
-    public void ifPresentOrElse(Consumer<? super T> consumer, Runnable runnable) {
-        if (isPresent())
-            consumer.accept(value);
-        else
-            runnable.run();
     }
 
     /**
@@ -158,23 +96,8 @@ implements Holder<T>, java.io.Serializable {
             return predicate.test(value) ? this : Option.empty();
     }
 
-    public Optional<T> asOptional() {
-        if (this.isPresent())
-            return Optional.of(value);
-        else
-            return Optional.empty();
-    }
-
     public Supplier<T> asSupplier() {
         return () -> value;
-    }
-
-    /**@see Optional#stream()*/
-    public Stream<T> stream() {
-        if (isPresent())
-            return Stream.of(value);
-        else
-            return Stream.empty();
     }
 
     /**@see Optional#equals(Object)*/

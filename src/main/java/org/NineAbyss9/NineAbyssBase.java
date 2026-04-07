@@ -4,35 +4,35 @@ package org.NineAbyss9;
 import org.NineAbyss9.annotation.NotCheck;
 import org.NineAbyss9.block.TryBlock;
 import org.NineAbyss9.cache.Cache;
-import org.NineAbyss9.event.EventContainer;
+//import org.NineAbyss9.event.EventContainer;
 
 /**The base of {@code NineAbyss}
  *
  * @author NineAbyss*/
 public class NineAbyssBase //implements AutoCloseable
 {
-    public static EventContainer eventContainer;
+    //public static EventContainer eventContainer;
     private NineAbyssBase() {
         throw new AssertionError();
     }
 
     public static void setup() {
         new Cache();
-        eventContainer = new EventContainer();
+        //eventContainer = new EventContainer();
     }
 
-    public void close() {
+    public static void close() {
         Cache.clear();
         Cache.clearCache();
-        eventContainer = null;
+        //eventContainer = null;
     }
 
     public static Cache cache() {
         return Cache.getInstance();
     }
 
-    protected java.lang.Object clone() throws java.lang.CloneNotSupportedException {
-        throw new java.lang.CloneNotSupportedException();
+    protected Object clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException();
     }
 
     public int hashCode() {

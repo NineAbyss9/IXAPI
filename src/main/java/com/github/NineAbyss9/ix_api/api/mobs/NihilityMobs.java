@@ -25,22 +25,14 @@ implements Nihilistic {
         return super.canAttack(pTarget);
     }
 
-    @Override
-    protected void registerGoals() {
-        super.registerGoals();
-    }
-
-    @Override
     public boolean addEffect(MobEffectInstance p_147208_, @Nullable Entity p_147209_) {
         return false;
     }
 
-    @Override
     public boolean fireImmune() {
         return true;
     }
 
-    @Override
     public MobType getMobType() {
         return ApiMobType.NIHILISTIC;
     }

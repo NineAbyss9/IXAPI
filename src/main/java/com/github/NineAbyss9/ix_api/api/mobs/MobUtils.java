@@ -1,6 +1,7 @@
 
 package com.github.NineAbyss9.ix_api.api.mobs;
 
+import net.minecraft.world.item.Items;
 import org.NineAbyss9.annotation.PAMAreNonnullByDefault;
 import com.github.NineAbyss9.ix_api.util.ObjectUtil;
 import net.minecraft.core.BlockPos;
@@ -34,6 +35,7 @@ import net.minecraft.world.scores.Team;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @PAMAreNonnullByDefault
@@ -300,6 +302,22 @@ public record MobUtils(Entity entity) {
         }
     }
 
+    public static void disableShield(Entity mob, boolean causeOfAxe)
+    {
+        if (mob instanceof IShieldUser user)
+        {
+            user.disableShield(causeOfAxe);
+        } else if (mob instanceof Player player) {
+            player.disableShield(causeOfAxe);
+        }
+    }
+
+    public static void hurtShield(LivingEntity mob, int percent)
+    {
+        if (mob.getUseItem().is(Items.SHIELD))
+            IShieldUser.hurtShield(mob, percent);
+    }
+
     public static void sweepAttack(LivingEntity attacker, Entity target, DamageSource damageSource, float damage){
         sweepAttack(attacker, target, damageSource, damage, 1.0D);
     }
@@ -400,6 +418,89 @@ public record MobUtils(Entity entity) {
         Vec3 vector = pMob.getLookAngle();
         pMob.setDeltaMovement(vector.x * pSpeed, pMob.getDeltaMovement().y, vector.z * pSpeed);
     }
+
+    //Based on L_Ender's code
+    public static double calculateRange(LivingEntity livingEntity, DamageSource source) {
+        return source.getEntity() != null ? livingEntity.distanceToSqr(source.getEntity()) : -1;
+    }
+
+    public static List<LivingEntity> getEntityLivingBaseNearby(LivingEntity livingEntity, double distanceX, double distanceY, double distanceZ, double radius) {
+        return getEntitiesNearby(livingEntity, LivingEntity.class, distanceX, distanceY, distanceZ, radius);
+    }
+
+    public static  <T extends Entity> List<T> getEntitiesNearby(LivingEntity livingEntity, Class<T> entityClass, double dX, double dY, double dZ, double r) {
+        return livingEntity.level().getEntitiesOfClass(entityClass, livingEntity.getBoundingBox().inflate(dX, dY, dZ), e -> e != livingEntity && livingEntity.distanceTo(e) <= r + e.getBbWidth() / 2.0F && e.getY() <= livingEntity.getY() + dY);
+    }
+
+    public static void areaAttack(LivingEntity attacker, float range, float height, float arc, DamageSource source, float damage, boolean act) {
+        areaAttack(attacker, range, height, arc, damage, 0, 0, source, true, null, act);
+    }
+
+    public static void areaAttack(LivingEntity attacker, float range, float height, float arc, DamageSource source, float damage) {
+        areaAttack(attacker, range, height, arc, damage, 0, 0, source, true);
+    }
+
+    public static void areaAttack(LivingEntity attacker, float range, float height, float arc, float damage, float hpDamage, int shieldBreak, DamageSource damageSource, boolean knockback) {
+        areaAttack(attacker, range, height, arc, damage, hpDamage, shieldBreak, damageSource, knockback, null, false);
+    }
+
+    public static void areaAttack(LivingEntity attacker, float range, float height, float arc, float damage, float hpDamage,
+                                  int shieldBreak, DamageSource source, boolean knockback, @Nullable Consumer<LivingEntity> attackEffect,
+                                  boolean act) {
+        List<LivingEntity> entitiesHit = getEntityLivingBaseNearby(attacker, range, height, range, range);
+        if (!attacker.level().isClientSide) {
+            for (LivingEntity entityHit : entitiesHit) {
+                float entityRelativeAngle = getRelativeAngle(attacker, entityHit);
+                float entityHitDistance = (float)Math.sqrt((entityHit.getZ() - attacker.getZ()) *
+                        (entityHit.getZ() - attacker.getZ()) + (entityHit.getX() - attacker.getX()) * (entityHit.getX() - attacker.getX()));
+                if (entityHitDistance <= range && (entityRelativeAngle <= arc / 2 && entityRelativeAngle >= -arc / 2)
+                        || (entityRelativeAngle >= 360 - arc / 2 || entityRelativeAngle <= -360 + arc / 2)) {
+                    if (canHurt(entityHit, attacker)) {
+                        boolean flag = entityHit.hurt(source, damage + (entityHit.getMaxHealth() * hpDamage));
+                        if (entityHit.isDamageSourceBlocked(source) && shieldBreak > 0) {
+                            hurtShield(entityHit, shieldBreak);
+                        }
+                        if (flag) {
+                            double d0 = entityHit.getX() - attacker.getX();
+                            double d1 = entityHit.getZ() - attacker.getZ();
+                            double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
+                            if (knockback) {
+                                entityHit.push(d0 / d2 * 2.0D, 0.18D, d1 / d2 * 2.0D);
+                            }
+                            if (attackEffect != null) {
+                                attackEffect.accept(entityHit);
+                            }
+                        } else if (act) {
+                            if (entityHit.hurt(source, damage + (entityHit.getMaxHealth() * hpDamage))) {
+                                double d0 = entityHit.getX() - attacker.getX();
+                                double d1 = entityHit.getZ() - attacker.getZ();
+                                double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
+                                if (knockback) {
+                                    entityHit.push(d0 / d2 * 2.5D, 0.18D, d1 / d2 * 2.2D);
+                                }
+                                if (attackEffect != null) {
+                                    attackEffect.accept(entityHit);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static float getRelativeAngle(LivingEntity attacker, LivingEntity entityHit) {
+        float entityHitAngle = (float)((Math.atan2(entityHit.getZ() - attacker.getZ(), entityHit.getX() - attacker.getX()) * (180 / Math.PI) - 90) % 360);
+        float entityAttackingAngle = attacker.yBodyRot % 360;
+        if (entityHitAngle < 0) {
+            entityHitAngle += 360;
+        }
+        if (entityAttackingAngle < 0) {
+            entityAttackingAngle += 360;
+        }
+        return entityHitAngle - entityAttackingAngle;
+    }
+    //To here
 
     public static class HostileNearestAttackableTargetGoal
             extends NearestAttackableTargetGoal<LivingEntity> {

@@ -7,12 +7,10 @@ import java.util.Map;
 import java.util.Objects;
 
 public abstract class Pair<L, R>
-implements Map.Entry<L, R>, Comparable<Pair<L, R>>, java.io.Serializable
-{
+implements Map.Entry<L, R>, Comparable<Pair<L, R>>, java.io.Serializable {
     @java.io.Serial
     private static final long serialVersionUID = 8947688449640458794L;
-    Pair()
-    {
+    Pair() {
     }
 
     public abstract L left();

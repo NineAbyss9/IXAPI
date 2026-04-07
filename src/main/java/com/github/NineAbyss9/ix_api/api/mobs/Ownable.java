@@ -22,6 +22,10 @@ extends TraceableEntity, OwnableEntity {
     default void setHostile(boolean hostile) {
     }
 
+    default void setHostile() {
+        this.setHostile(true);
+    }
+
     @Nullable
     default LivingEntity getMasterOwner() {
         if (this.getOwner() instanceof Ownable ownable) {

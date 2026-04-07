@@ -24,7 +24,7 @@ public class MobFoodData {
     private int lastFoodLevel = 20;
     public MobFoodData(Mob pMob, int pMaxFoodLevel) {
         this.mob = pMob;
-        this.maxFoodLevel = pMaxFoodLevel;
+        this.foodLevel = this.maxFoodLevel = pMaxFoodLevel;
     }
 
     public MobFoodData(Mob pMob) {
@@ -58,12 +58,10 @@ public class MobFoodData {
         this.lastFoodLevel = this.foodLevel;
         if (mob.hasEffect(MobEffects.HUNGER)) {
             MobEffectInstance hunger = mob.getEffect(MobEffects.HUNGER);
-            assert hunger != null;
             this.addExhaustion(0.005F * (hunger.getAmplifier() + 1));
         }
         if (mob.hasEffect(MobEffects.SATURATION)) {
             MobEffectInstance saturation = mob.getEffect(MobEffects.SATURATION);
-            assert saturation != null;
             this.eat(saturation.getAmplifier() + 1, 1.0F);
         }
         if (this.exhaustionLevel > 4.0F) {
@@ -75,7 +73,7 @@ public class MobFoodData {
             }
         }
         boolean flag = mob.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
-        if (flag && this.saturationLevel > 0.0F && this.isHurt() && this.foodLevel >= 20) {
+        if (flag && this.saturationLevel > 0.0F && this.isHurt() && this.foodLevel >= this.maxFoodLevel) {
             ++this.tickTimer;
             if (this.tickTimer >= 10) {
                 float f = Math.min(this.saturationLevel, 6.0F);
@@ -83,7 +81,7 @@ public class MobFoodData {
                 this.addExhaustion(f);
                 this.tickTimer = 0;
             }
-        } else if (flag && this.foodLevel >= 18 && this.isHurt()) {
+        } else if (flag && this.foodLevel >= this.maxFoodLevel * 0.9F && this.isHurt()) {
             ++this.tickTimer;
             if (this.tickTimer >= 80) {
                 this.mob.heal(1.0F);

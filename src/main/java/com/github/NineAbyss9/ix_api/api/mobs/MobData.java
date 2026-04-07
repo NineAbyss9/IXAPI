@@ -40,6 +40,10 @@ public class MobData {
         return mob.level().dimension() == Level.END;
     }
 
+    public boolean isInNether() {
+        return this.mob.level().dimension() == Level.NETHER;
+    }
+
     public boolean isInOverWorld() {
         return this.mob.level().dimension() == Level.OVERWORLD;
     }

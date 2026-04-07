@@ -40,7 +40,7 @@ public interface IConversion {
             }
             this.decreaseConvertTick();
         }
-        if (this.getConversionTick() == 0) {
+        if (this.getConversionTick() <= 0) {
             this.performConvert();
         }
     }
