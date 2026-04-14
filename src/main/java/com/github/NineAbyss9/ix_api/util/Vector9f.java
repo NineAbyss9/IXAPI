@@ -1,6 +1,9 @@
 
 package com.github.NineAbyss9.ix_api.util;
 
+import com.github.NineAbyss9.ix_api.api.annotation.MaybeDeprecated;
+
+@MaybeDeprecated
 public class Vector9f {
     private final float x;
     private final float y;

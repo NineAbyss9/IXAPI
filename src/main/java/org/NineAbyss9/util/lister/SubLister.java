@@ -52,8 +52,9 @@ implements Lister<E> {
             return new SubLister<>(c);
         else {
             SubLister<E> subLister = new SubLister<>();
-            for (E element : elements)
+            for (E element : elements) {
                 subLister.add(element);
+            }
             return subLister;
         }
     }

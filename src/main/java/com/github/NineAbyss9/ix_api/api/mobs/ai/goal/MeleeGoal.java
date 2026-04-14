@@ -10,6 +10,10 @@ extends ApiMeleeAttackGoal {
         super(finder, speed);
     }
 
+    public MeleeGoal(PathfinderMob finder) {
+        super(finder, 1.0D);
+    }
+
     protected void checkAndPerformAttack(LivingEntity pTarget, double pRange) {
     }
 }

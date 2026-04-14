@@ -6,23 +6,23 @@ import org.NineAbyss9.util.function.FunctionCollector;
 public class Action {
     private final Runnable action;
     private final Runnable action1;
-    public Action(Runnable trueAction, Runnable falseAction) {
+    public Action(final Runnable trueAction, final Runnable falseAction) {
         this.action = trueAction;
         this.action1 = falseAction;
     }
 
-    public void run(boolean flag) {
+    public void run(final boolean flag) {
         if (flag)
             action.run();
         else
             action1.run();
     }
 
-    public static Action emptyFalse(Runnable trueAction) {
+    public static Action emptyFalse(final Runnable trueAction) {
         return new Action(trueAction, FunctionCollector.emptyAction());
     }
 
-    public static Action emptyTrue(Runnable falseAction) {
+    public static Action emptyTrue(final Runnable falseAction) {
         return new Action(FunctionCollector.emptyAction(), falseAction);
     }
 }

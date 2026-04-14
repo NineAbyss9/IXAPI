@@ -6,11 +6,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 import org.NineAbyss9.annotation.doc.Message;
-import org.NineAbyss9.annotation.doc.Since;
 
 import java.util.Random;
 
-@Since("1.0.0")
 public class ApiRandom {
     private static final Random staticRandom = new Random();
     private final Random random;

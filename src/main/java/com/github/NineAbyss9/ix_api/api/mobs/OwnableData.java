@@ -28,11 +28,11 @@ public class OwnableData {
         this.setFlag(this.flag.id + 1);
         if (this.ownable instanceof Entity entity) {
             entity.playSound(SoundEvents.UI_BUTTON_CLICK.get());
-            //if (entity.level().isClientSide) {
+            if (entity.level().isClientSide) {
                 Minecraft.getInstance().gui.setOverlayMessage(Component.translatable(
-                        "info.noixmodapi.ownable_data.next", entity.getDisplayName(), Component.translatable(
-                                "info.noixmodapi.ownable_data." + this.flag.id)), false);
-            //}
+                        "info.ix_api.ownable_data.next", entity.getDisplayName(), Component.translatable(
+                                "info.ix_api.ownable_data." + this.flag.id)), false);
+            }
         }
     }
 
@@ -69,17 +69,11 @@ public class OwnableData {
         }
 
         public static Flag byId(int pId) {
-            switch (pId) {
-                case 1 -> {
-                    return Flag.FOLLOWING;
-                }
-                case 2 -> {
-                    return Flag.STAYING;
-                }
-                default -> {
-                    return Flag.WANDERING;
-                }
-            }
+            return switch (pId) {
+                case 1 -> Flag.FOLLOWING;
+                case 2 -> Flag.STAYING;
+                default -> Flag.WANDERING;
+            };
         }
     }
 }

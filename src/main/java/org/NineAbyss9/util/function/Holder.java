@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 
 public interface Holder<T> extends Supplier<T>
 {
+    T get();
+
     default Option<T> option()
     {
         return Option.ofNullable(get());
@@ -45,8 +47,7 @@ public interface Holder<T> extends Supplier<T>
 
     default T orElseGet(Supplier<T> t)
     {
-        T result;
-        return (result = get()) == null ? t.get() : result;
+        return get() == null ? t.get() : get();
     }
 
     /**
@@ -66,7 +67,8 @@ public interface Holder<T> extends Supplier<T>
     }
 
     /**@see Optional#stream()*/
-    default Stream<T> stream() {
+    default Stream<T> stream()
+    {
         if (isPresent())
             return Stream.of(get());
         else
@@ -123,5 +125,21 @@ public interface Holder<T> extends Supplier<T>
     default boolean isEmpty()
     {
         return get() == null;
+    }
+
+    static <T> Holder<T> newHolder(T value) {
+        return new SimpleImp<>(value);
+    }
+
+    public static class SimpleImp<T> implements Holder<T> {
+        private final T value;
+
+        public SimpleImp(T pValue) {
+            this.value = pValue;
+        }
+
+        public T get() {
+            return value;
+        }
     }
 }

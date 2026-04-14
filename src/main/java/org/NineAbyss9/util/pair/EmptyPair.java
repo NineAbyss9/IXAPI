@@ -13,11 +13,11 @@ final class EmptyPair<L, R> extends Pair<L, R> {
         return null;
     }
 
-    public R setValue(R value) {
+    public R setRight(R value) {
         return null;
     }
 
-    public L setKey(L key) {
+    public L setLeft(L key) {
         return null;
     }
 }

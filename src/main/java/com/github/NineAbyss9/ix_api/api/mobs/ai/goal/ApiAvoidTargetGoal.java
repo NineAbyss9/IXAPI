@@ -14,7 +14,6 @@ public class ApiAvoidTargetGoal extends AvoidEntityGoal<LivingEntity> {
                 EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(living));
     }
 
-    @Override
     public boolean canUse() {
         if (this.toAvoid instanceof Mob target) {
             if (target.getTarget() == this.mob) {

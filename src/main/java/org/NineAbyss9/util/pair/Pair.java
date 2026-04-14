@@ -41,7 +41,17 @@ implements Map.Entry<L, R>, Comparable<Pair<L, R>>, java.io.Serializable {
         return Option.ofNullable(right());
     }
 
-    public abstract L setKey(L key);
+    public R setValue(R value) {
+        return this.setRight(value);
+    }
+
+    public  L setKey(L key) {
+        return this.setLeft(key);
+    }
+
+    public abstract L setLeft(L left);
+
+    public abstract R setRight(R right);
 
     public int compareTo(Pair<L, R> o) {
         boolean leftEquals = Objects.equals(left(), o.left());

@@ -32,7 +32,9 @@ public class ApiTradeWithPlayerGoal extends Goal {
             Player $$0 = this.merchant.getTradingPlayer();
             if ($$0 == null) {
                 return false;
-            } else return !(this.mob.distanceToSqr($$0) > 16.0);
+            } else {
+                return !(this.mob.distanceToSqr($$0) > 16.0);
+            }
         }
     }
 

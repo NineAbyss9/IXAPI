@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  *
  * @author NineAbyss*/
 @SuppressWarnings("unused")
-public final class Option<T>
+public class Option<T>
 implements Holder<T>, java.io.Serializable {
     //SerialVersion
     @java.io.Serial

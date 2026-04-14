@@ -32,7 +32,6 @@ public class GoToLivingGoal extends Goal {
         if (this.targetEntity != null && this.targetEntity != this.mob) {
             this.mob.getNavigation().moveTo(this.targetEntity, this.speedModifier);
         }
-        this.stop();
     }
 
     public boolean canContinueToUse() {

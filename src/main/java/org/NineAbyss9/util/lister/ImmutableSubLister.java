@@ -102,8 +102,9 @@ extends SubLister<E> {
             return new ImmutableSubLister<>(c);
         else {
             ImmutableSubLister<E> subLister = new ImmutableSubLister<>();
-            for (E element : elements)
+            for (E element : elements) {
                 subLister.add(element);
+            }
             return subLister;
         }
     }

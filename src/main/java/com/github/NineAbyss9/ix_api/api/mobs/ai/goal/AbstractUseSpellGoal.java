@@ -19,7 +19,6 @@ public abstract class AbstractUseSpellGoal extends Goal {
         this.caster = finder;
     }
 
-    @Override
     public boolean canUse() {
         if (!this.checkTarget()) {
             return false;
@@ -30,7 +29,6 @@ public abstract class AbstractUseSpellGoal extends Goal {
         return this.mob.tickCount >= this.nextAttackTickCount;
     }
 
-    @Override
     public void start() {
         this.attackWarmUpDelay = reducedTickDelay(this.getCastWarmupTime());
         this.caster.setSpellTick(this.getCastingTime());
@@ -41,12 +39,10 @@ public abstract class AbstractUseSpellGoal extends Goal {
         this.caster.setSpellType(this.getSpell());
     }
 
-    @Override
     public boolean canContinueToUse() {
         return this.attackWarmUpDelay > 0 && this.checkTarget();
     }
 
-    @Override
     public void tick() {
         --this.attackWarmUpDelay;
         if (this.attackWarmUpDelay == 0) {

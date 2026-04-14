@@ -28,22 +28,20 @@ extends Goal {
     @Nullable
     protected final Predicate<ItemStack> predicate;
 
-    public ApiRangedBowAttackGoal(RangedAttackMob p_25773_, double p_25774_, int p_25776_, float p_25777_) {
-        this(p_25773_, p_25774_, p_25776_, p_25777_, null);
+    /**@param p_25777_ the distance*/
+    public ApiRangedBowAttackGoal(RangedAttackMob pMob, double pSpeed, int p_25776_, float p_25777_) {
+        this(pMob, pSpeed, p_25776_, p_25777_, null);
     }
 
-    public ApiRangedBowAttackGoal(RangedAttackMob p_25773_, double p_25774_, int p_25776_, float p_25777_, @Nullable Predicate<ItemStack> stackPredicate) {
-        if (!(p_25773_ instanceof LivingEntity)) {
-            throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
-        } else {
-            this.attackMob = p_25773_;
-            this.mob = (Mob)p_25773_;
-            this.speedModifier = p_25774_;
-            this.attackIntervalMin = p_25776_;
-            this.attackRadiusSqr = p_25777_ * p_25777_;
-            this.predicate = stackPredicate;
-            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-        }
+    /**@param pDis the distance*/
+    public ApiRangedBowAttackGoal(RangedAttackMob pMob, double pSpeed, int p_25776_, float pDis, @Nullable Predicate<ItemStack> stackPredicate) {
+        this.attackMob = pMob;
+        this.mob = (Mob)pMob;
+        this.speedModifier = pSpeed;
+        this.attackIntervalMin = p_25776_;
+        this.attackRadiusSqr = pDis * pDis;
+        this.predicate = stackPredicate;
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
     public boolean requiresUpdateEveryTick() {

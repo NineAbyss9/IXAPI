@@ -1,6 +1,7 @@
 
 package org.NineAbyss9.util;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 public final class IXUtil {
@@ -12,6 +13,19 @@ public final class IXUtil {
     IXUtil(Object o) {
         obj = o;
         m = new Manager(o.getClass());
+    }
+
+    @SafeVarargs
+    public static <T> T[] make(T... t) {
+        return t;
+    }
+
+    public static void newIO(String message) throws IOException {
+        throw new IOException(message);
+    }
+
+    public static void newRuntime(String mes) {
+        throw new RuntimeException(mes);
     }
 
     static {

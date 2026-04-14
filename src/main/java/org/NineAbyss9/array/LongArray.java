@@ -7,6 +7,10 @@ extends NumberArray<Long> {
         super(pTs);
     }
 
+    public long getLong(int index) {
+        return this.get(index);
+    }
+
     public static LongArray of(Long... pLongs) {
         return new LongArray(pLongs);
     }

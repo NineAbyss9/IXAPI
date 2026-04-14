@@ -43,6 +43,7 @@ public class FunctionCollector {
         return supplier.get();
     }
 
+    /// Makes a new Supplier
     public static <T> Supplier<T> supplier(T value) {
         return () -> value;
     }

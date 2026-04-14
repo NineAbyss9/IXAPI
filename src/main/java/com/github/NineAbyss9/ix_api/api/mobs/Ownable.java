@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+//Some codes from Goety "IOwned"
 public interface Ownable
 extends TraceableEntity, OwnableEntity {
     default boolean isHostile() {

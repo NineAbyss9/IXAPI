@@ -25,11 +25,11 @@ extends Pair<L, R> {
         return right;
     }
 
-    public L setKey(L key) {
+    public L setLeft(L key) {
         return left = key;
     }
 
-    public R setValue(R value) {
+    public R setRight(R value) {
         return right = value;
     }
 

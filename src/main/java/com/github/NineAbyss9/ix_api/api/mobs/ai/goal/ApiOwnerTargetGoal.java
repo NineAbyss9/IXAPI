@@ -67,7 +67,7 @@ public class ApiOwnerTargetGoal extends TargetGoal {
     }
 
     protected double getFollowDistance() {
-        return Maths.square(300);
+        return Maths.square(300.0D);
     }
 
     public boolean target() {

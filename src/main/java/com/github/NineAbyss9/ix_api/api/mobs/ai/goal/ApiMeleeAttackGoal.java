@@ -8,7 +8,6 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
-import org.jetbrains.annotations.NotNull;
 import org.NineAbyss9.util.IXUtil;
 import org.NineAbyss9.util.IXUtilUser;
 
@@ -161,8 +160,8 @@ public class ApiMeleeAttackGoal extends Goal implements IXUtilUser {
         return cooldownByHealth ? (int)((this.mob.getHealth() / this.mob.getMaxHealth()) * 10f) : reducedTickDelay(20);
     }
 
-    protected double getAttackReachSqr(@NotNull LivingEntity p_25556_) {
-        if (this.attackRange != 2.0) {
+    protected double getAttackReachSqr(LivingEntity p_25556_) {
+        if (Double.compare(this.attackRange, 2.0D) != 0.0D) {
             return this.attackRange;
         }
         return this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + p_25556_.getBbWidth();

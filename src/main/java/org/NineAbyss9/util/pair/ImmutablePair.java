@@ -19,11 +19,11 @@ public final class ImmutablePair<L, R> extends Pair<L, R> {
         return right;
     }
 
-    public R setValue(R value) {
+    public R setRight(R value) {
         throw new UnsupportedOperationException();
     }
 
-    public L setKey(L key) {
+    public L setLeft(L key) {
         throw new UnsupportedOperationException();
     }
 
