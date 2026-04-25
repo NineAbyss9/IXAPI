@@ -54,22 +54,22 @@ implements Iterable<E>, IXUtilUser //, java.io.Serializable
         return this.array;
     }
 
-    public E get(int pIndex)
+    public synchronized E get(int pIndex)
     {
         return this.array[pIndex];
     }
 
-    public void set(int pIndex, E pElement)
+    public synchronized void set(int pIndex, E pElement)
     {
         this.array[pIndex] = pElement;
     }
 
-    public E first()
+    public synchronized E first()
     {
         return this.array[0];
     }
 
-    public E last()
+    public synchronized E last()
     {
         return this.array[this.array.length - 1];
     }
@@ -103,7 +103,7 @@ implements Iterable<E>, IXUtilUser //, java.io.Serializable
 
     public Map<Integer, E> hashmap()
     {
-        Map<Integer, E> map = new HashMap<>();
+        Map<Integer, E> map = new HashMap<Integer, E>();
         for (int i = 0;i < length();i++)
             map.put(i, this.get(i));
         return map;
@@ -111,7 +111,7 @@ implements Iterable<E>, IXUtilUser //, java.io.Serializable
 
     public Map<Integer, E> map()
     {
-        Map<Integer, E> map = new TreeMap<>();
+        Map<Integer, E> map = new TreeMap<Integer, E>();
         for (int i = 0;i < length();i++)
             map.put(i, this.get(i));
         return map;
@@ -124,6 +124,20 @@ implements Iterable<E>, IXUtilUser //, java.io.Serializable
         {
             action.accept(it.next());
         }
+    }
+
+    public ObjectArray<E> fill(E element) {
+        Arrays.fill(this.array, element);
+        return this;
+    }
+
+    public ObjectArray<E> fillIfAbsent(E element) {
+        for (int i = 0;i < this.length();i++) {
+            if (this.get(i) == null) {
+                this.set(i, element);
+            }
+        }
+        return this;
     }
 
     public <T> T map(Function<E, T> func, int index)
@@ -158,7 +172,8 @@ implements Iterable<E>, IXUtilUser //, java.io.Serializable
         return new ObjectArray<>(pSize, pElements);
     }
 
-    public static <T> T[] emptyArray() {
-        return IXUtil.c.convert(EMPTY_ARRAY);
+    public static <T> T[] emptyArray()
+    {
+        return IXUtil.c.<T[]>convert(EMPTY_ARRAY);
     }
 }

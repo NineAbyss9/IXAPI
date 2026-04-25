@@ -35,7 +35,7 @@ public class DamageTester extends ApiPathfinderMob {
         if (!this.level().isClientSide) {
             this.sendSystemMessage(Component.literal(this.give("setHealth " + p_21154_)));
         }
-        super.setHealth(20 + 1.0E-1F);
+        super.setHealth(20.0F);
     }
 
     public void kill() {

@@ -5,7 +5,6 @@ import org.NineAbyss9.util.function.Holder;
 
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.Stream;
 
 /**A container like {@linkplain Optional}, implements {@linkplain Supplier}, {@linkplain java.io.Serializable}.
  *

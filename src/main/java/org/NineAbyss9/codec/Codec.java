@@ -5,8 +5,10 @@ import org.NineAbyss9.annotation.doc.Building;
 import org.NineAbyss9.code.Code;
 
 @Building
-public interface Codec extends Decoder, Encoder {
-    Codec field(String st);
+public interface Codec<E> extends Decoder, Encoder {
+    Codec<E> field(String st);
+
+    E decode();
 
     void encode(Code code);
 

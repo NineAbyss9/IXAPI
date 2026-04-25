@@ -2,6 +2,7 @@
 package com.github.NineAbyss9.ix_api.init;
 
 import com.github.NineAbyss9.ix_api.IXApi;
+import com.github.NineAbyss9.ix_api.api.item.ContainerItem;
 import com.github.NineAbyss9.ix_api.common.item.OwnerSetter;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -18,6 +19,7 @@ public class ApiItems {
             IXApi.MOD_ID);
     public static final RegistryObject<Item> OWNER_SETTER;
     public static final RegistryObject<Item> TESTER_SPAWN_EGG;
+    public static final RegistryObject<Item> CONTAINER_ITEM;
 
     private static RegistryObject<Item> spawnEgg(String name, Supplier<? extends EntityType<? extends Mob>>
             supplier, int g, int b) {
@@ -32,5 +34,6 @@ public class ApiItems {
         OWNER_SETTER = REGISTER.register("owner_setter", OwnerSetter::new);
         TESTER_SPAWN_EGG = spawnEgg("damage_tester", ApiEntities.DAMAGE_TESTER,
                 0, 0);
+        CONTAINER_ITEM = REGISTER.register("container", ContainerItem::new);
     }
 }

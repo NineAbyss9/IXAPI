@@ -115,6 +115,11 @@ implements Ownable {
         this.addTargetGoal(true);
     }
 
+    protected void addFollowOwnerGoal(int p) {
+        this.goalSelector.addGoal(p, new FollowOwnerGoal<>(this, 1.0F,
+                12.0F, 4.0F, false));
+    }
+
     public void setTargets() {
         this.setTargets(100);
     }
@@ -149,7 +154,7 @@ implements Ownable {
     protected void customServerAiStep() {
         if (this.hasLife()) {
             --this.lifeTicks;
-            if (this.getLifeTick() <= 0) {
+            if (this.lifeTicks <= 0) {
                 this.discard();
             }
         }
@@ -353,15 +358,18 @@ implements Ownable {
         protected final float teleportRange;
         protected final boolean targetTP;
 
+        /**Don't square*/
         public FollowOwnerGoal(T entity, double speedModifier, float startDistance, float stopDistance, boolean canFly) {
             this(entity, speedModifier, startDistance, stopDistance, canFly, 144, true);
         }
 
+        /**Don't square*/
         public FollowOwnerGoal(T entity, double speedModifier, float startDistance, float stopDistance, boolean canFly,
                                float tpRange) {
             this(entity, speedModifier, startDistance, stopDistance, canFly, tpRange, true);
         }
 
+        /**Don't square*/
         public FollowOwnerGoal(T entity, double speedModifier, float startDistance, float stopDistance, boolean canFly,
                                float tpRange, boolean targetTp) {
             this.tamable = entity;

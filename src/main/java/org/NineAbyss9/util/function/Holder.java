@@ -1,6 +1,7 @@
 
 package org.NineAbyss9.util.function;
 
+import org.NineAbyss9.util.IXUtil;
 import org.NineAbyss9.util.Option;
 
 import java.util.NoSuchElementException;
@@ -9,7 +10,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public interface Holder<T> extends Supplier<T>
+public interface Holder<T> extends Supplier<T>, org.NineAbyss9.util.IXUtilUser
 {
     T get();
 
@@ -32,16 +33,18 @@ public interface Holder<T> extends Supplier<T>
      */
     default T orElseThrow()
     {
-        if (isEmpty())
+        if (isEmpty()) {
             throw new NoSuchElementException("No value present");
+        }
         return get();
     }
 
     default <X extends Throwable> T orElseThrow(X exc) throws X
     {
         T result = get();
-        if (result == null)
+        if (result == null) {
             throw exc;
+        }
         return result;
     }
 
@@ -55,7 +58,7 @@ public interface Holder<T> extends Supplier<T>
      * {@code other}.
      *
      * @param other the value to be returned, if no value is present.
-     *        May be {@code null}.
+     *              May be {@code null}.
      * @return the value, if present, otherwise {@code other}
      */
     default T orElse(T other)
@@ -66,7 +69,9 @@ public interface Holder<T> extends Supplier<T>
             return other;
     }
 
-    /**@see Optional#stream()*/
+    /**
+     * @see Optional#stream()
+     */
     default Stream<T> stream()
     {
         if (isPresent())
@@ -81,18 +86,17 @@ public interface Holder<T> extends Supplier<T>
      *
      * @return the value, if present, otherwise {@code null}
      */
-    default T getIf(boolean flag) {
+    default T getIf(boolean flag)
+    {
         return ifOrElse(flag, null);
     }
-
 
     /**
      * If a {@code flag} is {@code true} returns the value, otherwise returns
      * {@code  other}.
      *
      * @param other the value to be returned, if no value is present.
-     * May be {@code null}.
-     *
+     *              May be {@code null}.
      * @return the value, if present, otherwise {@code other}
      */
     default T ifOrElse(boolean flag, T other)
@@ -103,14 +107,20 @@ public interface Holder<T> extends Supplier<T>
             return other;
     }
 
-    /**@see Optional#ifPresent(Consumer)*/
-    default void ifPresent(Consumer<? super T> consumer) {
+    /**
+     * @see Optional#ifPresent(Consumer)
+     */
+    default void ifPresent(Consumer<? super T> consumer)
+    {
         if (isPresent())
             consumer.accept(get());
     }
 
-    /**@see Optional#ifPresentOrElse(Consumer, Runnable)*/
-    default void ifPresentOrElse(Consumer<? super T> consumer, Runnable runnable) {
+    /**
+     * @see Optional#ifPresentOrElse(Consumer, Runnable)
+     */
+    default void ifPresentOrElse(Consumer<? super T> consumer, Runnable runnable)
+    {
         if (isPresent())
             consumer.accept(get());
         else
@@ -127,18 +137,41 @@ public interface Holder<T> extends Supplier<T>
         return get() == null;
     }
 
-    static <T> Holder<T> newHolder(T value) {
+    default <R> Holder<R> cast()
+    {
+        return IXUtil.c.convert(this);
+    }
+
+    /**
+     * @param clazz a class who implements {@linkplain Holder}
+     * @throws ClassCastException if not.
+     */
+    default <R> R cast(Class<? extends R> clazz)
+    {
+        return clazz.cast(this);
+    }
+
+    default <R> R castValue()
+    {
+        return IXUtil.c.convert(this.get());
+    }
+
+    static <T> SimpleImp<T> newHolder(T value)
+    {
         return new SimpleImp<>(value);
     }
 
-    public static class SimpleImp<T> implements Holder<T> {
+    public static class SimpleImp<T> implements Holder<T>
+    {
         private final T value;
 
-        public SimpleImp(T pValue) {
+        public SimpleImp(T pValue)
+        {
             this.value = pValue;
         }
 
-        public T get() {
+        public T get()
+        {
             return value;
         }
     }

@@ -48,7 +48,7 @@ public interface Lister<E> extends List<E>, Deque<E>, IXUtilUser
 
     boolean contains(Object obj);
 
-    /**Gets a sample of a {@code Lister}*/
+    /**Gets a sample of a {@linkplain Lister}*/
     default E sample(RandomGenerator random) {
         return this.get(random.nextInt(size() - 1));
     }

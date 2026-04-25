@@ -1,6 +1,7 @@
 
 package com.github.NineAbyss9.ix_api.api.mobs;
 
+import com.github.NineAbyss9.ix_api.api.annotation.MaybeDeprecated;
 import com.google.common.collect.Maps;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemCooldowns;
@@ -8,7 +9,9 @@ import net.minecraft.world.item.ItemCooldowns;
 import java.util.Map;
 
 /**The {@code Cooldown} class is a util that save cooldowns in entities.
+ * Just like {@linkplain ItemCooldowns}
  */
+@MaybeDeprecated
 public class Cooldown {
     public final Map<String, CooldownInstance> cooldowns = Maps.newHashMap();
     protected int tickCount;

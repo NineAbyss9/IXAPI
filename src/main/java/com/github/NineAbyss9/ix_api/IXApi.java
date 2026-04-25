@@ -26,6 +26,8 @@ import javax.annotation.Nonnull;
 @Mod("ix_api")
 public class IXApi implements ModOfNineAbyss {
     public static final String MOD_ID = "ix_api";
+    @SuppressWarnings("unused")
+    public static final String MODID = MOD_ID;
     public static final String NOIXMODAPI = "noixmodapi";
     public static final String BLUE_OCEANS = "blue_oceans";
     public static final Logger LOGGER = LogUtils.getLogger();

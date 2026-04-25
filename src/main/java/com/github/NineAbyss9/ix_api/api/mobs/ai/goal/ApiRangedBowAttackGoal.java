@@ -103,8 +103,12 @@ extends Goal {
         }
     }
 
+    public boolean checkSee() {
+        return this.seeTime >= 20;
+    }
+
     public void moveOrStrafe(LivingEntity livingentity, double distance) {
-        if (distance <= this.attackRadiusSqr && this.seeTime >= 20) {
+        if (distance <= this.attackRadiusSqr && this.checkSee()) {
             this.mob.getNavigation().stop();
             ++this.strafingTime;
         } else {
