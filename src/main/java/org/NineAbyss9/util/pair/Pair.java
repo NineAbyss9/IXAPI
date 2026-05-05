@@ -67,6 +67,16 @@ implements Map.Entry<L, R>, Comparable<Pair<L, R>>, java.io.Serializable, org.Ni
         this.setRight(right);
     }
 
+    public Pair<L, R> copy()
+    {
+        return isMutable() ? MutablePair.of(left(), right()) : ImmutablePair.of(left(), right());
+    }
+
+    public boolean isMutable()
+    {
+        return false;
+    }
+
     public abstract L setLeft(L left);
 
     public abstract R setRight(R right);

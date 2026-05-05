@@ -4,27 +4,23 @@ package org.NineAbyss9;
 import org.NineAbyss9.annotation.NotCheck;
 import org.NineAbyss9.block.TryBlock;
 import org.NineAbyss9.cache.Cache;
-//import org.NineAbyss9.event.EventContainer;
 
-/**The base of {@code NineAbyss}
+/**NineAbyss's base
  *
  * @author NineAbyss*/
 public class NineAbyssBase //implements AutoCloseable
 {
-    //public static EventContainer eventContainer;
     private NineAbyssBase() {
         throw new AssertionError();
     }
 
     public static void setup() {
         new Cache();
-        //eventContainer = new EventContainer();
     }
 
     public static void close() {
         Cache.clear();
         Cache.clearCache();
-        //eventContainer = null;
     }
 
     public static Cache cache() {

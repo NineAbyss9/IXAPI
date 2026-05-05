@@ -17,6 +17,11 @@ extends Pair<L, R> {
         right = r;
     }
 
+    public boolean isMutable()
+    {
+        return true;
+    }
+
     public L left() {
         return left;
     }

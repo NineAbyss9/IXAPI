@@ -121,9 +121,7 @@ implements Holder<T>, java.io.Serializable {
 
     /**@see Optional#toString() */
     public String toString() {
-        return value != null
-                ? ("Option[" + value + "]")
-                : "Option.empty";
+        return value != null ? ("Option[" + value + "]") : "Option.empty";
     }
 
     public boolean isNaN() {

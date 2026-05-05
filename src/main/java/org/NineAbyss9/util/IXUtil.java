@@ -15,6 +15,8 @@ public final class IXUtil {
         m = new Manager(o.getClass());
     }
 
+    ///  this method make you create an array more convenient.
+    ///  @return the array
     @SafeVarargs
     public static <T> T[] make(T... t) {
         return t;
@@ -24,9 +26,13 @@ public final class IXUtil {
         throw new IOException(message);
     }
 
+    public static void newRuntime() {throw new RuntimeException();}
+
     public static void newRuntime(String mes) {
         throw new RuntimeException(mes);
     }
+
+    public static void newRuntime(Exception e) {throw new RuntimeException(e);}
 
     static {
         c = new Converter();

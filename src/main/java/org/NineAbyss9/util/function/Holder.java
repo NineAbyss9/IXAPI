@@ -14,6 +14,8 @@ public interface Holder<T> extends Supplier<T>, org.NineAbyss9.util.IXUtilUser
 {
     T get();
 
+    String toString();
+
     default Option<T> option()
     {
         return Option.ofNullable(get());
@@ -101,10 +103,7 @@ public interface Holder<T> extends Supplier<T>, org.NineAbyss9.util.IXUtilUser
      */
     default T ifOrElse(boolean flag, T other)
     {
-        if (flag)
-            return this.get();
-        else
-            return other;
+        return flag ? this.get() : other;
     }
 
     /**

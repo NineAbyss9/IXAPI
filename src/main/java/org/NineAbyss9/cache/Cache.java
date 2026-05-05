@@ -3,7 +3,10 @@ package org.NineAbyss9.cache;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
+@SuppressWarnings("unchecked")
 public class Cache {
     private final Map<Integer, Object> caches = new LinkedHashMap<>();
     private static int next;
@@ -28,19 +31,31 @@ public class Cache {
         return next++;
     }
 
-    public Object get(int key) {
-        return caches.get(key);
+    public static <T> T get(int key) {
+        return (T)instance.caches.get(key);
     }
 
-    public static Object put(int key, Object value) {
-        return instance.caches.put(key, value);
+    public static <T> T computeIfAbsent(int key, Function<Integer, ?> func) {
+        return (T)instance.caches.computeIfAbsent(key, func);
     }
 
-    public static Object add(Object value) {
-        return instance.caches.put(next(), value);
+    public static <T> T compute(int key, BiFunction<? super Integer, ? super Object, ? extends T> remappingFunction) {
+        return (T)instance.caches.compute(key, remappingFunction);
     }
 
-    public static Object remove(Integer key) {
-        return instance.caches.remove(key);
+    public static <T> T putIfAbsent(int key, T value) {
+        return (T)instance.caches.putIfAbsent(key, value);
+    }
+
+    public static <T> T put(int key, Object value) {
+        return (T)instance.caches.put(key, value);
+    }
+
+    public static <T> T add(Object value) {
+        return (T)instance.caches.put(next(), value);
+    }
+
+    public static <T> T remove(Integer key) {
+        return (T)instance.caches.remove(key);
     }
 }

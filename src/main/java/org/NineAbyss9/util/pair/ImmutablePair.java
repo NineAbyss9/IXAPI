@@ -31,9 +31,9 @@ public final class ImmutablePair<L, R> extends Pair<L, R> {
         return new ImmutablePair<>(left, right);
     }
 
-    public static <L, R> ImmutablePair<L, R> of(java.util.Map.Entry<L, R> entry) {
+    public static <L, R> ImmutablePair<L, R> of(final java.util.Map.Entry<L, R> entry) {
         if (entry == null)
-            return new ImmutablePair<>(null, null);
+            return new ImmutablePair<>((L)null, (R)null);
         return new ImmutablePair<>(entry.getKey(), entry.getValue());
     }
 }

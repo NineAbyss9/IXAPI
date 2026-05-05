@@ -30,6 +30,7 @@ public class ApiEntities {
     }
 
     static {
-        DAMAGE_TESTER = register("damage_tester", EntityType.Builder.of(DamageTester::new, MobCategory.MISC));
+        DAMAGE_TESTER = register("damage_tester", EntityType.Builder.of(DamageTester::new, MobCategory.MISC)
+                .sized(0.6F, 1.9F));
     }
 }
