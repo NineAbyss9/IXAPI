@@ -8,6 +8,7 @@ import org.joml.Vector3f;
 import org.NineAbyss9.annotation.doc.Message;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ApiRandom {
     private static final Random staticRandom = new Random();
@@ -16,21 +17,28 @@ public class ApiRandom {
         this.random = new Random(seed);
     }
 
-    public ApiRandom() {this(System.currentTimeMillis() * Util.getNanos());}
+    public ApiRandom() {
+        this(System.currentTimeMillis() * Util.getNanos());
+    }
 
     public static int nextInt(@Message("Value should greater than 0") int i) {
-        return staticRandom.nextInt(i);
+        return ThreadLocalRandom.current().nextInt(i);
     }
 
     public Vector3f randomVec3f() {
-        return new Vector3f(this.random.nextFloat(), this.random.nextFloat(), this.random.nextFloat());
+        ThreadLocalRandom rand = ThreadLocalRandom.current();
+        return new Vector3f(rand.nextFloat((float)Integer.MAX_VALUE), rand.nextFloat((float)Integer.MAX_VALUE),
+                rand.nextFloat((float)Integer.MAX_VALUE));
     }
 
     public Vec3 randomPosition() {
-        return new Vec3(this.random.nextDouble(), this.random.nextDouble(), this.random.nextDouble());
+        ThreadLocalRandom rand = ThreadLocalRandom.current();
+        return new Vec3(rand.nextDouble((double)Integer.MAX_VALUE), rand.nextDouble((double)Integer.MAX_VALUE),
+                rand.nextDouble((double)Integer.MAX_VALUE));
     }
 
     public BlockPos randomPos() {
-        return BlockPos.containing(this.random.nextDouble(), this.random.nextDouble(), this.random.nextDouble());
+        ThreadLocalRandom rand = ThreadLocalRandom.current();
+        return BlockPos.containing(rand.nextInt(), rand.nextInt(), rand.nextInt());
     }
 }

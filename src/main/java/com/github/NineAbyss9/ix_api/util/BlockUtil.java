@@ -6,6 +6,6 @@ import net.minecraft.world.phys.Vec3;
 
 public class BlockUtil {
     public static Vec3 getTruePos(BlockPos pPos) {
-        return new Vec3(pPos.getX() + 0.5d, pPos.getY(), pPos.getZ() + 0.5d);
+        return new Vec3(pPos.getX() + 0.5D, pPos.getY(), pPos.getZ() + 0.5D);
     }
 }

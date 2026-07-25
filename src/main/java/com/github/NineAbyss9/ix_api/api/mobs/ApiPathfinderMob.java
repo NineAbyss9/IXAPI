@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -111,8 +112,9 @@ extends PathfinderMob {
     public void handleEntityEvent(byte p_21375_) {
         if (p_21375_ == 60) {
             this.spawnAnim();
-        } else
+        } else {
             super.handleEntityEvent(p_21375_);
+        }
     }
 
     public void addOrRemoveAttributeModifier(Attribute pA, AttributeModifier pM, boolean add) {
@@ -132,9 +134,14 @@ extends PathfinderMob {
         return !this.level().isClientSide;
     }
 
+    /**We overrided this method to send system messages.Stolen from following:
+     *
+     * @see net.minecraft.server.level.ServerPlayer#sendSystemMessage(Component, boolean)
+     *
+     * @see net.minecraft.client.player.LocalPlayer#sendSystemMessage(Component) */
     public void sendSystemMessage(Component pMessage) {
         if (this.isServerSide()) {
-            serverLevel().getServer().getPlayerList().broadcastSystemMessage(pMessage, false);
+            this.serverLevel().getServer().getPlayerList().broadcastSystemMessage(pMessage, false);
         } else {
             Minecraft.getInstance().gui.getChat().addMessage(pMessage);
         }
@@ -161,6 +168,21 @@ extends PathfinderMob {
 
     public double z() {
         return this.position().z;
+    }
+
+    public double getRandomX(double pScale)
+    {
+        return this.getX((2.0D * ThreadLocalRandom.current().nextDouble() - 1.0D) * pScale);
+    }
+
+    public double getRandomY()
+    {
+        return this.getY(ThreadLocalRandom.current().nextDouble());
+    }
+
+    public double getRandomZ(double pScale)
+    {
+        return this.getZ((2.0D * ThreadLocalRandom.current().nextDouble() - 1.0D) * pScale);
     }
 
     public ServerLevel serverLevel() {
@@ -203,8 +225,8 @@ extends PathfinderMob {
     protected void populateDefaultItems() {
     }
 
-    public Random getRandomUtil() {
-        return this.randomUtil;
+    public ThreadLocalRandom getRandomUtil() {
+        return ThreadLocalRandom.current();///Use {@linkplain java.util.concurrent.ThreadLocalRandom}
     }
 
     public ParticleUtil getParticleUtil() {

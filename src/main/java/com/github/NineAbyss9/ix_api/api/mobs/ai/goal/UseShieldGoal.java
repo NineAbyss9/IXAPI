@@ -4,11 +4,11 @@ package com.github.NineAbyss9.ix_api.api.mobs.ai.goal;
 import com.github.NineAbyss9.ix_api.api.mobs.IShieldUser;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import org.NineAbyss9.math.MathSupport;
 import org.NineAbyss9.util.IXUtil;
 import org.NineAbyss9.util.IXUtilUser;
 
 import java.util.EnumSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class UseShieldGoal<E extends Mob & IShieldUser>
 extends Goal implements IXUtilUser {
@@ -33,7 +33,7 @@ extends Goal implements IXUtilUser {
     }
 
     public void tick() {
-        this.mob.getMoveControl().strafe(-0.75F, MathSupport.random.nextBoolean() ?
+        this.mob.getMoveControl().strafe(-0.75F, ThreadLocalRandom.current().nextBoolean() ?
                 0.75F : -0.75F);
     }
 

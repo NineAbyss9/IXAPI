@@ -3,16 +3,19 @@ package org.NineAbyss9.math;
 
 import org.NineAbyss9.annotation.doc.Building;
 import org.NineAbyss9.annotation.doc.Message;
+import org.NineAbyss9.util.IXUtil;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**Class for math.*/
 @Building
 public class AbyssMath {
-    @org.NineAbyss9.annotation.NotCheck
-    public static final int TRUTH = 9;
-    /**Holds the Pi value.*/
+    /**Holds the Pi value.
+     * @see Math#PI*/
     public static final float PI = 3.1415926535897932384626F;
     /**@see Math#E*/
     public static final float E = 2.7182818284590452354F;
@@ -102,23 +105,23 @@ public class AbyssMath {
 
     //Upgrade
     public static float random() {
-        return random.nextFloat();
+        return MathSupport.quickNextFloat();
     }
 
     public static float randomBetween(Random ran, float min, float max) {
-        return ran.nextFloat(max - min + 1) + min;
+        return ran.nextFloat(max - min + 1.0F) + min;
     }
 
     public static float randomBetween(float min, float max) {
-        return randomBetween(random, min, max);
+        return randomBetween(ThreadLocalRandom.current(), min, max);
     }
 
     public static double randomBetween(Random rand, double min, double max) {
-        return rand.nextDouble(max - min + 1) + min;
+        return rand.nextDouble(max - min + 1.0D) + min;
     }
 
     public static double randomBetween(double min, double max) {
-        return randomBetween(random, min, max);
+        return randomBetween(ThreadLocalRandom.current(), min, max);
     }
 
     public static int randomBetween(Random rand, int min, int max) {
@@ -126,18 +129,18 @@ public class AbyssMath {
     }
 
     public static int randomBetween(int min, int max) {
-        return randomBetween(random, min, max);
+        return randomBetween(ThreadLocalRandom.current(), min, max);
     }
 
     public static float average(float... values) {
-        float cache = 0;
+        float cache = 0.0F;
         for (float f : values)
             cache += f;
         return cache / values.length;
     }
 
     public static double average(double... values) {
-        double cache = 0;
+        double cache = 0.0D;
         for (double d : values)
             cache += d;
         return cache / values.length;
@@ -179,7 +182,7 @@ public class AbyssMath {
 
     public static double randomMax(double pValue, double max) {
         double value = random(pValue);
-        if (value < 0) {
+        if (value < 0.0D) {
             return Math.min(value, -max);
         } else {
             return Math.max(value, max);
@@ -217,6 +220,35 @@ public class AbyssMath {
 
     public static float clamp(float value, float min, float max) {
         return Math.min(Math.max(value, min), max);
+    }
+
+    /**It may be unused, but it's here for completeness.*/
+    public static Number runOnNewThread(String methodName, Class<?>[] args, Object... params)
+    {
+        Method method;
+        try {
+            method = AbyssMath.class.getDeclaredMethod(methodName, args);
+        } catch (NoSuchMethodException e) {
+            IXUtil.l.warning("No such method: " + methodName);
+            return 0;
+        }
+        try {
+            method.setAccessible(true);
+            AtomicReference<Number> result = new AtomicReference<>(0);
+            Thread thread = new Thread(() -> {
+                try {
+                    result.set((Number)method.invoke(null, params));
+                } catch (Exception e) {
+                    IXUtil.l.warning("Failed to invoke method: " + methodName);
+                }
+            });
+            thread.start();
+            return result.get();
+        } catch (Exception e)
+        {
+            IXUtil.l.warning("Failed to run method: " + methodName);
+        }
+        return 0;
     }
 
     public static MathSupport.Lerp lerp() {

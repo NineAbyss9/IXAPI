@@ -2,9 +2,11 @@
 package org.NineAbyss9.codec;
 
 import org.NineAbyss9.code.Code;
+import org.NineAbyss9.util.IXUtil;
 
-public class SimpleCodec<E>
-implements Codec<E> {
+class SimpleCodec<E>
+implements Codec<E, SimpleCodec<E>>
+{
     final E code;
     String key = "";
     boolean initialized;
@@ -13,8 +15,8 @@ implements Codec<E> {
         this.code = element;
     }
 
-    public Codec<E> field(String st) {
-        return this;
+    public SimpleCodec<E> field(String st) {
+        return IXUtil.newUnsupportedOperation();
     }
 
     public E decode() {
@@ -23,14 +25,14 @@ implements Codec<E> {
     }
 
     public void encode(Code code) {
-
+        this.decode(code.read());
     }
 
     public void decode(Code code) {
-
+        this.decode(code.read());
     }
 
-    public void encode(String code) {
+    public void encode(final String code) {
         if (this.initialized) return;
         this.key = code;
         this.initialized = true;

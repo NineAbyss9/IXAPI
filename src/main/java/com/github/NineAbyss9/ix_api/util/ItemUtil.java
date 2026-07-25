@@ -2,6 +2,7 @@
 package com.github.NineAbyss9.ix_api.util;
 
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import org.NineAbyss9.annotation.PAMAreNonnullByDefault;
 import net.minecraft.sounds.SoundEvent;
@@ -35,7 +36,8 @@ public class ItemUtil {
     }
 
     public static ItemStack getItemByHand(LivingEntity pEntity, InteractionHand pHand) {
-        return pEntity.getItemInHand(pHand);
+        return pEntity.getItemBySlot(pHand == InteractionHand.MAIN_HAND ?
+                EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
     }
 
     public static boolean isMainHandEmpty(LivingEntity pEntity) {

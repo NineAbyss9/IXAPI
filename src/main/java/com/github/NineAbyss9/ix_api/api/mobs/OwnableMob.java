@@ -40,6 +40,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
 public abstract class OwnableMob
@@ -125,22 +126,26 @@ implements Ownable {
     }
 
     public void setTargets(int cooldown) {
-        if (this.getTarget() instanceof Mob mob && mob.getTarget() == null) {
-            mob.setTarget(this);
-            if (cooldown > 0) {
-                this.targetCooldown = cooldown;
-            }
+        if (!(this.getTarget() instanceof Mob mob) || mob.getTarget() != null) {
+            return;
+        }
+        mob.setTarget(this);
+        if (cooldown > 0) {
+            this.targetCooldown = cooldown;
         }
     }
 
     public static void setTargetByOwner(Ownable ownable) {
-        if (ownable instanceof Mob mob) {
-            if (ownable.getOwner() != null && ownable.getOwner() instanceof Mob b) {
+        if (!(ownable instanceof Mob mob)) {
+            return;
+        }
+        ownable.isOwned(e -> {
+            if (e instanceof Mob b) {
                 if (b.getTarget() != null && MobUtils.canHurt(b.getTarget(), mob)) {
                     mob.setTarget(b.getTarget());
                 }
             }
-        }
+        });
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
@@ -252,10 +257,10 @@ implements Ownable {
     @Nullable
     public Team getTeam() {
         LivingEntity living = this.getOwner();
-        if (living != null && !this.areBothOwner(living)) {
-            return living.getTeam();
+        if (living == null || this.areBothOwner(living)) {
+            return super.getTeam();
         }
-        return super.getTeam();
+        return living.getTeam();
     }
 
     public static Predicate<Entity> ownablePredicate() {
@@ -323,23 +328,29 @@ implements Ownable {
             super.start();
             this.mob.setTarget(this.ownerLastHurt);
             LivingEntity $$0 = this.mob.getOwner();
-            if ($$0 != null) {
-                this.timestamp = $$0.getLastHurtMobTimestamp();
+            if ($$0 == null) {
+                return;
             }
+            this.timestamp = $$0.getLastHurtMobTimestamp();
+        }
+
+        protected boolean canAttack(@Nullable LivingEntity pEntity, TargetingConditions pConditions)
+        {
+            return pEntity != null && pConditions.test(pEntity, this.mob);
         }
 
         public boolean canUse() {
-            if (this.mob.getOwner() != null) {
+            if (this.mob.getOwner() == null) {
+                return false;
+            } else {
                 LivingEntity $$0 = this.mob.getOwner();
                 if ($$0 == null) {
                     return false;
                 } else {
                     this.ownerLastHurt = $$0.getLastHurtMob();
-                    int $$1 = $$0.getLastHurtMobTimestamp();
-                    return $$1 != this.timestamp && this.canAttack(this.ownerLastHurt, TargetingConditions.DEFAULT);
+                    return $$0.getLastHurtMobTimestamp() != this.timestamp && this.canAttack(this.ownerLastHurt,
+                            TargetingConditions.DEFAULT);
                 }
-            } else {
-                return false;
             }
         }
     }
@@ -415,7 +426,7 @@ implements Ownable {
             } else if (this.tamable.getTarget() != null) {
                 return false;
             } else {
-                return !(this.tamable.distanceToSqr(this.owner) <= this.stopDistance * this.stopDistance);
+                return !(this.tamable.distanceToSqr(this.owner) <= (double)(this.stopDistance * this.stopDistance));
             }
         }
 
@@ -464,7 +475,7 @@ implements Ownable {
 
         private void teleportToOwner() {
             BlockPos $$0 = this.owner.blockPosition();
-            for(int $$1 = 0; $$1 < 10; ++$$1) {
+            for (int $$1 = 0; $$1 < 10; ++$$1) {
                 int $$2 = this.randomIntInclusive(-3, 3);
                 int $$3 = this.randomIntInclusive(-1, 1);
                 int $$4 = this.randomIntInclusive(-3, 3);
@@ -477,13 +488,13 @@ implements Ownable {
         }
 
         private boolean maybeTeleportTo(int p_25304_, int p_25305_, int p_25306_) {
-            if (Math.abs((double)p_25304_ - this.owner.getX()) < 2.0 && Math.abs(p_25306_ - this.owner.getZ()) < 2.0) {
+            if (Math.abs((double)p_25304_ - this.owner.getX()) < 2.0D && Math.abs(p_25306_ - this.owner.getZ()) < 2.0D) {
                 return false;
             } else if (!this.canTeleportTo(new BlockPos(p_25304_, p_25305_, p_25306_))) {
                 return false;
             } else {
-                this.tamable.moveTo(p_25304_ + 0.5, p_25305_, p_25306_ + 0.5, this.tamable.getYRot(),
-                        this.tamable.getXRot());
+                this.tamable.moveTo(p_25304_ + 0.5D, p_25305_, p_25306_ + 0.5D,
+                        this.tamable.getYRot(), this.tamable.getXRot());
                 this.navigation.stop();
                 return true;
             }
@@ -505,7 +516,7 @@ implements Ownable {
         }
 
         private int randomIntInclusive(int p_25301_, int p_25302_) {
-            return this.tamable.getRandom().nextInt(p_25302_ - p_25301_ + 1) + p_25301_;
+            return ThreadLocalRandom.current().nextInt(p_25302_ - p_25301_ + 1) + p_25301_;
         }
     }
 

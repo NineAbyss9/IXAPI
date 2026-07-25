@@ -18,10 +18,11 @@ public class EventContainer {
 
     public static <T extends Event> void post(T event) {
         var list = listeners.get(event.getClass());
-        if (list != null) {
-            for (var consumer : list) {
-                consumer.handleEvent(event);
-            }
+        if (list == null) {
+            return;
+        }
+        for (var consumer : list) {
+            consumer.handleEvent(event);
         }
     }
 

@@ -6,7 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import javax.annotation.Nullable;
 
 public interface IAgeableMob {
-    void spawnChildFromBreeding(ServerLevel p_27564_, IAgeableMob p_27565_);
+    void spawnChildFromBreeding(ServerLevel pLevel, IAgeableMob pAnother);
 
     @Nullable
     IAgeableMob getBreedMob();

@@ -114,6 +114,11 @@ implements Holder<T>, java.io.Serializable {
         }
     }
 
+    public Option<T> option()
+    {
+        return this;
+    }
+
     /**@see Optional#hashCode() */
     public int hashCode() {
         return Objects.hashCode(value);

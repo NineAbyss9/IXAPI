@@ -8,6 +8,7 @@ public class ImmutableSubLister<E>
 extends SubLister<E> {
     @java.io.Serial
     private static final long serialVersionUID = 5322653187890826517L;
+    private static final ImmutableSubLister<?> EMPTY = of();
     transient final E[] array;
     @java.lang.SafeVarargs
     ImmutableSubLister(E... elements) {
@@ -26,11 +27,11 @@ extends SubLister<E> {
     }
 
     public E get(int index) {
-        return this.array[index];
+        return (E)this.array[index];
     }
 
     public E peek() {
-        return array[0];
+        return (E)array[0];
     }
 
     public E element() {
@@ -42,7 +43,7 @@ extends SubLister<E> {
     }
 
     public E peekLast() {
-        return array[size() - 1];
+        return (E)array[size() - 1];
     }
 
     public E poll() {
@@ -58,7 +59,7 @@ extends SubLister<E> {
     }
 
     public E getFirst() {
-        E e = array[0];
+        E e = (E)array[0];
         if (e == null)
             throw new NoSuchElementException();
         return e;
@@ -92,16 +93,27 @@ extends SubLister<E> {
         return null;
     }
 
-    @java.lang.SafeVarargs
+    public Elements<E> elements()
+    {
+        return Elements.of(this);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E> ImmutableSubLister<E> empty()
+    {
+        return (ImmutableSubLister<E>)EMPTY;
+    }
+
+    @SafeVarargs
     public static <E> ImmutableSubLister<E> of(E... elements) {
-        return new ImmutableSubLister<>(elements);
+        return new ImmutableSubLister<E>(elements);
     }
 
     public static <E> ImmutableSubLister<E> copyOf(Iterable<? extends E> elements) {
         if (elements instanceof Collection<? extends E> c)
-            return new ImmutableSubLister<>(c);
+            return new ImmutableSubLister<E>(c);
         else {
-            ImmutableSubLister<E> subLister = new ImmutableSubLister<>();
+            ImmutableSubLister<E> subLister = new ImmutableSubLister<E>();
             for (E element : elements) {
                 subLister.add(element);
             }

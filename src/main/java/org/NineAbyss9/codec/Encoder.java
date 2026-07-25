@@ -5,7 +5,8 @@ import org.NineAbyss9.annotation.doc.Building;
 import org.NineAbyss9.code.Code;
 
 @Building
-public interface Encoder {
+public interface Encoder
+{
     /**Encode a {@linkplain Code}*/
     void encode(Code code);
 

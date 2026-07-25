@@ -2,6 +2,7 @@
 package com.github.NineAbyss9.ix_api.util;
 
 import javax.annotation.Nonnull;
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,6 +14,8 @@ import java.util.Set;
 public final class UnmodifiableSet<T>
 extends HashSet<T>
 implements Set<T> {
+    @Serial
+    private static final long serialVersionUID = 7988226479616177062L;
     final transient T[] array;
     @SafeVarargs
     private UnmodifiableSet(T... ts) {

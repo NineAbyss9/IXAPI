@@ -22,6 +22,11 @@ extends Pair<L, R> {
         return true;
     }
 
+    public Pair<L, R> mutable()
+    {
+        return this;
+    }
+
     public L left() {
         return left;
     }

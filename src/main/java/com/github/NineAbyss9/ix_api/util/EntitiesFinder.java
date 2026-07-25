@@ -13,7 +13,6 @@ import java.util.UUID;
 
 @ParametersAreNonnullByDefault
 public record EntitiesFinder(Entity pSourceEntity) {
-
     @Nullable
     @ServerOnly
     public static Entity getEntity(Level level, @Nullable UUID uuid) {

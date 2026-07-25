@@ -3,7 +3,8 @@ package org.NineAbyss9.util;
 
 import org.NineAbyss9.util.function.FunctionCollector;
 
-public class Action {
+public class Action
+{
     private final Runnable action;
     private final Runnable action1;
     public Action(final Runnable trueAction, final Runnable falseAction) {
@@ -18,11 +19,33 @@ public class Action {
             action1.run();
     }
 
+    /**@param trueAction runs if the {@code flag} is true.
+     *
+     * @param flag the flag.*/
+    public static void run(Runnable trueAction, Runnable falseAction, boolean flag)
+    {
+        (flag ? trueAction : falseAction).run();
+    }
+
+    public static void run(Runnable trueAction, boolean flag)
+    {
+        if (flag) {
+            trueAction.run();
+        }
+    }
+
+    public static void runFalse(Runnable falseAction, boolean flag)
+    {
+        if (!flag) {
+            falseAction.run();
+        }
+    }
+
     public static Action emptyFalse(final Runnable trueAction) {
         return new Action(trueAction, FunctionCollector.emptyAction());
     }
 
     public static Action emptyTrue(final Runnable falseAction) {
-        return new Action(FunctionCollector.emptyAction(), falseAction);
+        return new Action(FunctionCollector.EMPTY_ACTION, falseAction);
     }
 }

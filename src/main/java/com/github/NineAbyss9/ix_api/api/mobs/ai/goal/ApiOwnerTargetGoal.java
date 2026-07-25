@@ -48,7 +48,7 @@ public class ApiOwnerTargetGoal extends TargetGoal {
     public boolean canUse() {
         if (this.mob instanceof Ownable ownable) {
             LivingEntity owner = ownable.getOwner();
-            if (!ownable.wouldHaveOwner()) {
+            if (!ownable.willBeOwned()) {
                 return false;
             }
             if (owner == null) {

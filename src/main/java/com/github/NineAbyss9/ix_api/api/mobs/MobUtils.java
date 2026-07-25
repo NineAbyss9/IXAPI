@@ -55,8 +55,7 @@ public record MobUtils(Entity entity) {
             if (entity.isInWater()) {
                 entity.getDeltaMovement().scale(0.5).add(0, 0.05, 0);
             }
-        }
-        if (i == 1) {
+        } else if (i == 1) {
             if (entity.isInLava()) {
                 entity.getDeltaMovement().scale(0.5).add(0, 0.1, 0);
             }
@@ -105,13 +104,12 @@ public record MobUtils(Entity entity) {
     }
 
     public static void healLiving(LivingEntity living, float amount) {
-        if (living.isAlive()) {
-            if (amount > 0) {
-                float v = amount;
-                v = Math.min(living.getMaxHealth() - living.getHealth(), v);
-                living.setHealth(living.getHealth() + v);
-            }
+        if (!living.isAlive() || amount <= 0) {
+            return;
         }
+        float v = amount;
+        v = Math.min(living.getMaxHealth() - living.getHealth(), v);
+        living.setHealth(living.getHealth() + v);
     }
 
     public static boolean isDead(LivingEntity living) {
@@ -135,11 +133,13 @@ public record MobUtils(Entity entity) {
                 }
             }
         }
-        if (entity1 instanceof Mob mob) {
-            if (entity instanceof LivingEntity livingEntity) {
-                if (mob.getTarget() == livingEntity) {
-                    return false;
-                }
+        if (!(entity1 instanceof Mob mob)) {
+            return entity.isAlliedTo(entity1) || entity1.isAlliedTo(entity) || entity == entity1 ||
+                    entity.getTeam() == entity1.getTeam();
+        }
+        if (entity instanceof LivingEntity livingEntity) {
+            if (mob.getTarget() == livingEntity) {
+                return false;
             }
         }
         return entity.isAlliedTo(entity1) || entity1.isAlliedTo(entity) || entity == entity1 ||
@@ -160,6 +160,7 @@ public record MobUtils(Entity entity) {
     }
 
     public static boolean canHurt(LivingEntity entity, @Nullable Entity sourceMob) {
+        if (sourceMob == null) return true;
         if (sourceMob == entity) {
             return false;
         }
@@ -199,22 +200,23 @@ public record MobUtils(Entity entity) {
         if (entity instanceof Player player && player.isCreative()) {
             return false;
         }
-        if (sourceMob != null) {
-            Team team = sourceMob.getTeam();
-            Team ea = entity.getTeam();
-            if (ea != null && ea.equals(team)) {
-                return false;
-            }
+        if (sourceMob == null) {
+            return entity.isAlive() && !entity.isInvulnerable();
+        }
+        Team team = sourceMob.getTeam();
+        Team ea = entity.getTeam();
+        if (ea != null && ea.equals(team)) {
+            return false;
         }
         return entity.isAlive() && !entity.isInvulnerable();
     }
 
-    public static void push(double x, double y, double z, Entity entity, double xSpeed, double ySpeed, double zSpeed) {
-        List<LivingEntity> list = entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(x, y, z));
+    public static void push(double x, double y, double z, Entity entity, double xSpeed, double ySpeed, double zSpeed)
+    {
+        List<LivingEntity> list = entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox()
+                .inflate(x, y, z), livingEntity -> MobUtils.canHurt(livingEntity, entity));
         for (LivingEntity lie : list) {
-            if (MobUtils.canHurt(lie, entity)) {
-                lie.push(xSpeed, ySpeed, zSpeed);
-            }
+            lie.push(xSpeed, ySpeed, zSpeed);
         }
     }
 
@@ -226,24 +228,30 @@ public record MobUtils(Entity entity) {
         }
     }
 
-    public static boolean rangeHurt(double x, double y, double z, Entity mob, DamageSource type, float damage, boolean flag) {
+    public static boolean rangeHurt(double x, double y, double z, Entity mob, DamageSource type, float damage,
+                                    boolean check) {
         List<LivingEntity> list = mob.level().getEntitiesOfClass(LivingEntity.class, mob.getBoundingBox().inflate(x, y, z));
+        boolean rt = false;
         for (LivingEntity lie : list) {
-            if (flag) {
-                return lie.hurt(type, damage);
-            } else {
-                if (mob instanceof LivingEntity living) {
-                    if (MobUtils.canHurt(lie, living)) {
-                        return lie.hurt(type, damage);
-                    }
+            if (rt) {
+                if (check) {
+                    lie.hurt(type, damage);
                 } else {
                     if (MobUtils.canHurt(lie, mob)) {
-                        return lie.hurt(type, damage);
+                        lie.hurt(type, damage);
+                    }
+                }
+            } else {
+                if (check) {
+                    rt = lie.hurt(type, damage);
+                } else {
+                    if (MobUtils.canHurt(lie, mob)) {
+                        rt = lie.hurt(type, damage);
                     }
                 }
             }
         }
-        return false;
+        return rt;
     }
 
     public static void rangeHurt(double x, double y, double z, Entity entity, DamageSource source,
@@ -251,16 +259,15 @@ public record MobUtils(Entity entity) {
         List<LivingEntity> list = entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(x, y, z),
                 predicate);
         for (LivingEntity lie : list) {
-            if (predicate.test(lie)) {
-                lie.hurt(source, damage);
-            }
+            lie.hurt(source, damage);
         }
     }
 
     public static void setAttributeValue(@Nullable AttributeInstance instance, double d) {
-        if (instance != null) {
-            instance.setBaseValue(d);
+        if (instance == null) {
+            return;
         }
+        instance.setBaseValue(d);
     }
 
     public static boolean rangeHurt(double x, double y, double z, Entity mob, DamageSource type, float damage) {
@@ -271,33 +278,26 @@ public record MobUtils(Entity entity) {
                                         float damage, int onFireTime) {
         List<LivingEntity> list = mob.level().getEntitiesOfClass(LivingEntity.class, mob.getBoundingBox().inflate(x, y, z));
         for (LivingEntity lie : list) {
-            if (mob instanceof LivingEntity living) {
-                if (MobUtils.canHurt(lie, living)) {
-                    lie.hurt(type, damage);
-                    if (!lie.fireImmune()) {
-                        lie.setSecondsOnFire(onFireTime);
-                    }
-                }
-            } else {
-                if (MobUtils.canHurt(lie, mob)) {
-                    lie.hurt(type, damage);
-                    if (!lie.fireImmune()) {
-                        lie.setSecondsOnFire(onFireTime);
-                    }
-                }
+            if (!MobUtils.canHurt(lie, mob)) {
+                continue;
+            }
+            lie.hurt(type, damage);
+            if (!lie.fireImmune()) {
+                lie.setSecondsOnFire(onFireTime);
             }
         }
     }
 
     public static void disableShield(double x, double y, double z, Entity mob) {
         List<Entity> players = mob.level().getEntitiesOfClass(Entity.class, mob.getBoundingBox().inflate(x, y, z));
-        if (!players.isEmpty()) {
-            for (Entity entityIn : players) {
-                if (entityIn instanceof Player player) {
-                    player.disableShield(true);
-                } else if (entityIn instanceof IShieldUser user) {
-                    user.disableShield(false);
-                }
+        if (players.isEmpty()) {
+            return;
+        }
+        for (Entity entityIn : players) {
+            if (entityIn instanceof Player player) {
+                player.disableShield(true);
+            } else if (entityIn instanceof IShieldUser user) {
+                user.disableShield(false);
             }
         }
     }
@@ -342,13 +342,15 @@ public record MobUtils(Entity entity) {
             if (itemstack.isEmpty()) {
                 mob.setSecondsOnFire(onFireTime);
             } else {
-                if (itemstack.isDamageableItem()) {
-                    itemstack.setDamageValue(itemstack.getDamageValue() + mob.getRandom().nextInt(2));
-                    if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
-                        mob.broadcastBreakEvent(EquipmentSlot.HEAD);
-                        mob.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
-                    }
+                if (!itemstack.isDamageableItem()) {
+                    return;
                 }
+                itemstack.setDamageValue(itemstack.getDamageValue() + mob.getRandom().nextInt(2));
+                if (itemstack.getDamageValue() < itemstack.getMaxDamage()) {
+                    return;
+                }
+                mob.broadcastBreakEvent(EquipmentSlot.HEAD);
+                mob.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
             }
         }
     }
@@ -453,35 +455,40 @@ public record MobUtils(Entity entity) {
                 float entityRelativeAngle = getRelativeAngle(attacker, entityHit);
                 float entityHitDistance = (float)Math.sqrt((entityHit.getZ() - attacker.getZ()) *
                         (entityHit.getZ() - attacker.getZ()) + (entityHit.getX() - attacker.getX()) * (entityHit.getX() - attacker.getX()));
-                if (entityHitDistance <= range && (entityRelativeAngle <= arc / 2 && entityRelativeAngle >= -arc / 2)
-                        || (entityRelativeAngle >= 360 - arc / 2 || entityRelativeAngle <= -360 + arc / 2)) {
-                    if (canHurt(entityHit, attacker)) {
-                        boolean flag = entityHit.hurt(source, damage + (entityHit.getMaxHealth() * hpDamage));
-                        if (entityHit.isDamageSourceBlocked(source) && shieldBreak > 0) {
-                            hurtShield(entityHit, shieldBreak);
+                if ((!(entityHitDistance <= range) || (!(entityRelativeAngle <= arc / 2.0F) || !(entityRelativeAngle >= -arc / 2.0F)))
+                        && (!(entityRelativeAngle >= 360.0F - arc / 2.0F) && !(entityRelativeAngle <= -360.0F + arc / 2.0F))) {
+                    continue;
+                }
+                if (!canHurt(entityHit, attacker)) {
+                    continue;
+                }
+                boolean flag = entityHit.hurt(source, damage + (entityHit.getMaxHealth() * hpDamage));
+                if (entityHit.isDamageSourceBlocked(source) && shieldBreak > 0) {
+                    hurtShield(entityHit, shieldBreak);
+                }
+                if (flag) {
+                    double d0 = entityHit.getX() - attacker.getX();
+                    double d1 = entityHit.getZ() - attacker.getZ();
+                    double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
+                    if (knockback) {
+                        entityHit.push(d0 / d2 * 2.0D, 0.18D, d1 / d2 * 2.0D);
+                    }
+                    if (attackEffect != null) {
+                        attackEffect.accept(entityHit);
+                    }
+                } else {
+                    if (!act) {
+                        continue;
+                    }
+                    if (entityHit.hurt(source, damage + (entityHit.getMaxHealth() * hpDamage))) {
+                        double d0 = entityHit.getX() - attacker.getX();
+                        double d1 = entityHit.getZ() - attacker.getZ();
+                        double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
+                        if (knockback) {
+                            entityHit.push(d0 / d2 * 2.5D, 0.18D, d1 / d2 * 2.2D);
                         }
-                        if (flag) {
-                            double d0 = entityHit.getX() - attacker.getX();
-                            double d1 = entityHit.getZ() - attacker.getZ();
-                            double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
-                            if (knockback) {
-                                entityHit.push(d0 / d2 * 2.0D, 0.18D, d1 / d2 * 2.0D);
-                            }
-                            if (attackEffect != null) {
-                                attackEffect.accept(entityHit);
-                            }
-                        } else if (act) {
-                            if (entityHit.hurt(source, damage + (entityHit.getMaxHealth() * hpDamage))) {
-                                double d0 = entityHit.getX() - attacker.getX();
-                                double d1 = entityHit.getZ() - attacker.getZ();
-                                double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
-                                if (knockback) {
-                                    entityHit.push(d0 / d2 * 2.5D, 0.18D, d1 / d2 * 2.2D);
-                                }
-                                if (attackEffect != null) {
-                                    attackEffect.accept(entityHit);
-                                }
-                            }
+                        if (attackEffect != null) {
+                            attackEffect.accept(entityHit);
                         }
                     }
                 }
@@ -490,13 +497,14 @@ public record MobUtils(Entity entity) {
     }
 
     public static float getRelativeAngle(LivingEntity attacker, LivingEntity entityHit) {
-        float entityHitAngle = (float)((Math.atan2(entityHit.getZ() - attacker.getZ(), entityHit.getX() - attacker.getX()) * (180 / Math.PI) - 90) % 360);
-        float entityAttackingAngle = attacker.yBodyRot % 360;
+        float entityHitAngle = (float)((Math.atan2(entityHit.getZ() - attacker.getZ(), entityHit.getX() - attacker.getX())
+                * (180 / Math.PI) - 90) % 360);
+        float entityAttackingAngle = attacker.yBodyRot % 360.0F;
         if (entityHitAngle < 0) {
-            entityHitAngle += 360;
+            entityHitAngle += 360.0F;
         }
-        if (entityAttackingAngle < 0) {
-            entityAttackingAngle += 360;
+        if (entityAttackingAngle < 0.0F) {
+            entityAttackingAngle += 360.0F;
         }
         return entityHitAngle - entityAttackingAngle;
     }

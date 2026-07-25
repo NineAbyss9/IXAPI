@@ -21,11 +21,26 @@ public class IntimacyData {
     }
 
     public void increase() {
-        ++this.intimacy;
+        this.intimacy = this.intimacy + 1;
+    }
+
+    public void increase(int increasement)
+    {
+        this.intimacy = this.intimacy + increasement;
+    }
+
+    public void decreasement()
+    {
+        this.intimacy = this.intimacy - 1;
+    }
+
+    public void decrease(int decreasement)
+    {
+        this.intimacy = this.intimacy - decreasement;
     }
 
     public void reset() {
-        this.setIntimacy(0);
+        this.intimacy = 0;
     }
 
     public void addAdditionalData(CompoundTag tag) {

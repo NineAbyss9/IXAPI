@@ -13,8 +13,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.NineAbyss9.math.AbyssMath;
-import org.NineAbyss9.math.MathSupport;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
 @PAMAreNonnullByDefault
@@ -24,10 +24,26 @@ public record ParticleUtil(Entity entity) {
     }
 
     @ClientOnly
-    public void addParticle(ParticleOptions pParticleData, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
-        if (this.level().isClientSide) {
-            this.level().addParticle(pParticleData, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed);
+    public static void sendParticles(Level level, ParticleOptions options,
+                                     int count, double x, double y, double z, double xDist, double yDist, double zDist, double maxSpeed)
+    {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        for (int i = 0;i < count;i++) {
+            double d1 = random.nextGaussian() * xDist;
+            double d3 = random.nextGaussian() * yDist;
+            double d5 = random.nextGaussian() * zDist;
+            double d6 = random.nextGaussian() * maxSpeed;
+            double d7 = random.nextGaussian() * maxSpeed;
+            double d8 = random.nextGaussian() * maxSpeed;
+            level.addParticle(options, x + d1,
+                    y + d3, z + d5, d6, d7, d8);
         }
+    }
+
+    @ClientOnly
+    public void addParticle(ParticleOptions pParticleData, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed)
+    {
+        this.level().addParticle(pParticleData, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed);
     }
 
     @ClientOnly
@@ -37,7 +53,7 @@ public record ParticleUtil(Entity entity) {
 
     @ClientOnly
     public static void addParticle(Level level, ParticleOptions options, BlockPos pos, double xs, double ys, double zs) {
-        level.addParticle(options, pos.getX() + 0.5d, pos.getY(), pos.getZ() + 0.5d, xs, ys, zs);
+        level.addParticle(options, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, xs, ys, zs);
     }
 
     @ClientOnly
@@ -59,29 +75,27 @@ public record ParticleUtil(Entity entity) {
 
     @ServerOnly
     public static void addParticleAroundSelf(Entity entity, ParticleOptions options, int count) {
-        if (!entity.level().isClientSide()) {
+        if (!entity.level().isClientSide) {
             ServerLevel level = (ServerLevel)entity.level();
-            double x = level.getRandom().nextGaussian() * 0.05d;
+            double speed = ThreadLocalRandom.current().nextGaussian() * 0.05D;
             level.sendParticles(options, entity.getX(), entity.getRandomY(), entity.getZ(), count,
-                    1.5d, 2d, 1.5d, x);
+                    1.5D,  2.0D, 1.5D, speed);
         }
     }
 
     @ClientOnly
-    public static void addFlatParticle(ParticleOptions options, Entity entity, double x, double z) {
-        if (entity.level().isClientSide()) {
-            double rx = entity.getRandomX(x);
-            double y = entity.getRandomY();
-            double rz = entity.getRandomZ(z);
-            entity.level().addParticle(options, rx, y, rz, 0d, 0d, 0d);
-        }
+    public static void addFlatParticle(ParticleOptions options, Entity entity, double x, double z)
+    {
+        double rx = entity.getRandomX(x);
+        double y = entity.getRandomY();
+        double rz = entity.getRandomZ(z);
+        entity.level().addParticle(options, rx, y, rz, 0d, 0d, 0d);
     }
 
     @ClientOnly
-    public static void addRedStoneParticle(Entity entity, double x, double y, double z, double xS, double yS, double zS) {
-        if (entity.level().isClientSide()) {
-            entity.level().addParticle(DustParticleOptions.REDSTONE, x, y, z, xS, yS, zS);
-        }
+    public static void addRedStoneParticle(Entity entity, double x, double y, double z, double xS, double yS, double zS)
+    {
+        entity.level().addParticle(DustParticleOptions.REDSTONE, x, y, z, xS, yS, zS);
     }
 
     @ServerOnly
@@ -101,23 +115,21 @@ public record ParticleUtil(Entity entity) {
     }
 
     @ClientOnly
-    public static void addParticle(Level level, ParticleOptions options, Vec3 pos, double dx, double dy, double dz) {
-        if (level.isClientSide) {
-            level.addParticle(options, pos.x(), pos.y(), pos.z(), dx, dy, dz);
-        }
+    public static void addParticle(Level level, ParticleOptions options, Vec3 pos, double dx, double dy, double dz)
+    {
+        level.addParticle(options, pos.x, pos.y, pos.z, dx, dy, dz);
     }
 
     @ClientOnly
-    public static void addParticle(Level level, ParticleOptions options, Vec3 pos, float[] floats) {
-        if (level.isClientSide) {
-            level.addParticle(options, pos.x(), pos.y(), pos.z(), floats[0], floats[1], floats[2]);
-        }
+    public static void addParticle(Level level, ParticleOptions options, Vec3 pos, float[] floats)
+    {
+        level.addParticle(options, pos.x, pos.y, pos.z, floats[0], floats[1], floats[2]);
     }
 
     @ServerOnly
     public static void serverAddParticle(ServerLevel serverLevel, ParticleOptions options, Vec3 pos) {
         serverLevel.sendParticles(options, pos.x, pos.y, pos.z,
-                1, 0d, 0d, 0d, 0d);
+                1, 0.0D, 0.0D, 0.0D, 0.0D);
     }
 
     @ServerOnly
@@ -129,7 +141,7 @@ public record ParticleUtil(Entity entity) {
         AABB aabb = entity.getBoundingBox();
         sendParticles((ServerLevel)entity.level(), options, entity.position(), count,
                 aabb.getXsize() - 0.2d, aabb.getYsize(), aabb.getZsize() - 0.2d,
-                MathSupport.random.nextGaussian() * 0.02d);
+                ThreadLocalRandom.current().nextGaussian() * 0.02d);
     }
 
     @ClientOnly
@@ -161,6 +173,18 @@ public record ParticleUtil(Entity entity) {
 
     public static void addBlockParticle(Level pLevel, BlockPos pPos) {
         addBlockParticle(pLevel, pPos, pPos.getX() + 0.5D, pPos.getY(), pPos.getZ() + 0.5D);
+    }
+
+    @ServerOnly
+    public static void explodeSmoke(Level pLevel, Vec3 pos, double pSpeed)
+    {
+        sendParticles((ServerLevel)pLevel, ParticleTypes.LARGE_SMOKE, pos, 30, 0.0D, 0.0D, 0.0D, pSpeed);
+    }
+
+    @ServerOnly
+    public static void explodeSmoke(Level pLevel, Vec3 pos)
+    {
+        sendParticles((ServerLevel)pLevel, ParticleTypes.LARGE_SMOKE, pos, 30, 0.0D, 0.0D, 0.0D, 0.15D);
     }
 
     public static ParticleOptions getItemParticleOption(ItemStack stackIn) {

@@ -20,9 +20,8 @@ public interface IAnimatedMob
         }
     }
 
-    default void startAfterStop(AnimationState state)
-    {
+    default void startAfterStop(AnimationState state) {
         this.stopAllAnimations();
-        state.startIfStopped(((Entity)this).tickCount);
+        state.start(((Entity)this).tickCount);
     }
 }

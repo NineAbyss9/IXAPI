@@ -54,22 +54,23 @@ implements Iterable<E>, IXUtilUser //, java.io.Serializable
         return this.array;
     }
 
-    public synchronized E get(int pIndex)
+    public E get(int pIndex)
     {
         return this.array[pIndex];
     }
 
-    public synchronized void set(int pIndex, E pElement)
+    /**@throws IndexOutOfBoundsException if the param {@code pIndex} is greater than the size of the array*/
+    public void set(int pIndex, E pElement)
     {
         this.array[pIndex] = pElement;
     }
 
-    public synchronized E first()
+    public E first()
     {
         return this.array[0];
     }
 
-    public synchronized E last()
+    public E last()
     {
         return this.array[this.array.length - 1];
     }

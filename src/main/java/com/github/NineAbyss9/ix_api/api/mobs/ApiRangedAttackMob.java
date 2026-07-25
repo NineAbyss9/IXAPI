@@ -10,6 +10,8 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public interface ApiRangedAttackMob
 extends RangedAttackMob{
     AbstractArrow getArrow(ItemStack stack, float fall);
@@ -37,7 +39,7 @@ extends RangedAttackMob{
         abstractarrow.shoot(d0, d1 + d3 * 0.20000000298023224, d2, 1.6F, 14
                 - this.rangedSelfSelector().level().getDifficulty().getId() * 4);
         this.rangedSelfSelector().playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F /
-                (this.rangedSelfSelector().getRandom().nextFloat() * 0.4F + 0.8F));
+                (ThreadLocalRandom.current().nextFloat() * 0.4F + 0.8F));
         this.rangedSelfSelector().level().addFreshEntity(abstractarrow);
     }
 }

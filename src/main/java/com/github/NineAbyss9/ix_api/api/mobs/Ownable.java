@@ -11,11 +11,13 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 //Some codes from Goety "IOwned"
 public interface Ownable
-extends TraceableEntity, OwnableEntity {
+extends TraceableEntity, OwnableEntity
+{
     default boolean isHostile() {
         return this.getOwner() instanceof Enemy;
     }
@@ -23,12 +25,14 @@ extends TraceableEntity, OwnableEntity {
     default void setHostile(boolean hostile) {
     }
 
-    default void setHostile() {
+    default void setHostile()
+    {
         this.setHostile(true);
     }
 
     @Nullable
-    default LivingEntity getMasterOwner() {
+    default LivingEntity getMasterOwner()
+    {
         if (this.getOwner() instanceof Ownable ownable) {
             return ownable.getOwner();
         } else {
@@ -36,26 +40,31 @@ extends TraceableEntity, OwnableEntity {
         }
     }
 
-    default boolean isOwnedBy(LivingEntity living) {
+    default boolean isOwnedBy(LivingEntity living)
+    {
         return this.getOwner() == living;
     }
 
-    default OwnableData getOwnableData() {
+    default OwnableData getOwnableData()
+    {
         return new OwnableData(this);
     }
 
-    default boolean canAccept(ItemStack stack) {
+    default boolean canAccept(ItemStack stack)
+    {
         return true;
     }
 
-    default void onSync(Synchronizer synchronizer) {
+    default void onSync(Synchronizer synchronizer)
+    {
     }
 
     @Nullable
-    default LivingEntity getOwner() {
+    default LivingEntity getOwner()
+    {
         if (this.ownableGetLevel().isClientSide) {
             int id = this.getOwnerId();
-            Entity entity = this.ownableGetLevel().getEntity(this.getOwnerId());
+            Entity entity = this.ownableGetLevel().getEntity(id);
             return (id <= -1 || !(entity instanceof LivingEntity) || entity == this) ? null : (LivingEntity)entity;
         } else {
             UUID uuid = this.getOwnerUUID();
@@ -66,8 +75,11 @@ extends TraceableEntity, OwnableEntity {
     @Nullable
     UUID getOwnerUUID();
 
-    /**Sets the owner of a {@linkplain Ownable}*/
-    default void setOwner(@Nullable LivingEntity lie) {
+    /**
+     * Sets the owner of a {@linkplain Ownable}
+     */
+    default void setOwner(@Nullable LivingEntity lie)
+    {
         if (lie != null) {
             this.setOwnerUUID(lie.getUUID());
             this.setOwnerId(lie.getId());
@@ -77,7 +89,9 @@ extends TraceableEntity, OwnableEntity {
         }
     }
 
-    /**Sets the owner uuid*/
+    /**
+     * Sets the owner uuid
+     */
     void setOwnerUUID(@Nullable UUID ownerUUID);
 
     default int getOwnerId() {
@@ -87,7 +101,8 @@ extends TraceableEntity, OwnableEntity {
     default void setOwnerId(int id) {
     }
 
-    default void setTargetByOwner() {
+    default void setTargetByOwner()
+    {
         if (this instanceof Mob && this.getOwner() instanceof Mob) {
             OwnableMob.setTargetByOwner(this);
         }
@@ -96,24 +111,40 @@ extends TraceableEntity, OwnableEntity {
     default void setLifeTick(int tick) {
     }
 
-    default int getLifeTick() {
+    default int getLifeTick()
+    {
         return 0;
     }
 
-    default boolean hasLife() {
+    default boolean hasLife()
+    {
         return false;
     }
 
-    default boolean wouldHaveOwner() {
+    default boolean willBeOwned() {
         return true;
     }
 
-    default boolean isUnowned() {
+    default boolean isUnowned()
+    {
         return this.getOwner() == null;
     }
 
     default boolean isOwned() {
+        if (!this.willBeOwned()) {
+            return false;
+        }
         return this.getOwner() != null;
+    }
+
+    default boolean isOwned(Consumer<LivingEntity> pConsumer) {
+        if (!this.willBeOwned()) {
+            return false;
+        }
+        LivingEntity owner = this.getOwner();
+        if (owner == null) return false;
+        pConsumer.accept(owner);
+        return true;
     }
 
     default boolean areBothOwner(LivingEntity living) {

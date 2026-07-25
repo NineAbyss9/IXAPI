@@ -4,10 +4,18 @@ package com.github.NineAbyss9.ix_api.common.item;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ItemBuilder {
+    public static Set<Supplier<? extends Item>> SPAWN_EGGS
+            = new LinkedHashSet<>();
+    public static Set<Supplier<? extends Item>> BLOCKS
+            = new LinkedHashSet<>();
+    public static Set<Supplier<? extends Item>> UTILS
+            = new LinkedHashSet<>();
     public Supplier<Item> item;
     public boolean mainCreative;
     public boolean spawnEggs;
@@ -70,11 +78,9 @@ public class ItemBuilder {
 
     public RegistryObject<? extends Item> build() {
         RegistryObject<? extends Item> obj = func.apply(this);
-        /*if (mainCreative) MAIN_CREATIVE_ITEMS.add(obj);
         if (spawnEggs) SPAWN_EGGS.add(obj);
         if (blocks) BLOCKS.add(obj);
         if (utils) UTILS.add(obj);
-        if (food) FARMING.add(obj);*/
         return obj;
     }
 }

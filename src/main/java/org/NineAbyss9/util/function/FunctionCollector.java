@@ -6,28 +6,32 @@ import org.NineAbyss9.util.*;
 import javax.annotation.Nullable;
 import java.util.function.*;
 
+@SuppressWarnings("unchecked")
 public class FunctionCollector {
-    public static final Runnable EMPTY_ACTION = () -> {};
-    public static final Consumer<Object> EMPTY_CONSUMER = (obj) -> {};
+    public static final Runnable EMPTY_ACTION = () -> {
+    };
+    public static final Consumer<Object> EMPTY_CONSUMER = (obj) -> {
+    };
+
     private FunctionCollector() {
         throw new AssertionError();
     }
 
     /**{@linkplain Predicate}*/
     public static <T> Predicate<T> alwaysTrue() {
-        return PredicateInstance.ALWAYS_TRUE.convert();
+        return (Predicate<T>)PredicateInstance.ALWAYS_TRUE;
     }
 
     public static <T> Predicate<T> alwaysFalse() {
-        return PredicateInstance.ALWAYS_FALSE.convert();
+        return (Predicate<T>)PredicateInstance.ALWAYS_FALSE;
     }
 
     public static <T> Predicate<T> notnull() {
-        return PredicateInstance.NOT_NULL.convert();
+        return (Predicate<T>)PredicateInstance.NOT_NULL;
     }
 
     public static <T> Predicate<T> isNull() {
-        return PredicateInstance.IS_NULL.convert();
+        return (Predicate<T>)PredicateInstance.IS_NULL;
     }
 
     /**{@linkplain Supplier}*/
@@ -59,8 +63,8 @@ public class FunctionCollector {
     }
 
     public static <T> void accept(@Nullable T obj, Consumer<T> action) {
-        if (obj != null)
-            action.accept(obj);
+        if (obj == null) return;
+        action.accept(obj);
     }
 
     private enum BooleanSupplierInstance implements BooleanSupplier {
@@ -98,10 +102,6 @@ public class FunctionCollector {
 
         public boolean test(Object t) {
             return false;
-        }
-
-        <T> Predicate<T> convert() {
-            return IXUtil.c.convert(this);
         }
     }
 }

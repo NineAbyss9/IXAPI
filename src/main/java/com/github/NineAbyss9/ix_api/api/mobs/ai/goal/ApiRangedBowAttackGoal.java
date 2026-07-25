@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
 public class ApiRangedBowAttackGoal
@@ -54,9 +55,10 @@ extends Goal {
 
     public boolean canUse() {
         if (this.predicate != null) {
-            if (!this.predicate.test(this.mob.getMainHandItem())) {
-                return false;
+            if (this.predicate.test(this.mob.getMainHandItem())) {
+                return this.mob.getTarget() != null && this.mob.getTarget().isAlive() && this.isHoldingBow();
             }
+            return false;
         }
         return this.mob.getTarget() != null && this.mob.getTarget().isAlive() && this.isHoldingBow();
     }
@@ -71,35 +73,36 @@ extends Goal {
 
     public void tick() {
         LivingEntity livingentity = this.mob.getTarget();
-        if (livingentity != null) {
-            double d0 = this.mob.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
-            boolean flag = this.mob.getSensing().hasLineOfSight(livingentity);
-            boolean flag1 = this.seeTime > 0;
-            if (flag != flag1) {
-                this.seeTime = 0;
-            }
-            if (flag) {
-                ++this.seeTime;
-            } else {
-                --this.seeTime;
-            }
-            this.moveOrStrafe(livingentity, d0);
-            if (this.mob.isUsingItem()) {
-                if (!flag && this.seeTime < -60) {
-                    this.mob.setAggressive(false);
-                    this.mob.setTarget(null);
+        if (livingentity == null) {
+            return;
+        }
+        double d0 = this.mob.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
+        boolean flag = this.mob.getSensing().hasLineOfSight(livingentity);
+        boolean flag1 = this.seeTime > 0;
+        if (flag != flag1) {
+            this.seeTime = 0;
+        }
+        if (flag) {
+            ++this.seeTime;
+        } else {
+            --this.seeTime;
+        }
+        this.moveOrStrafe(livingentity, d0);
+        if (this.mob.isUsingItem()) {
+            if (!flag && this.seeTime < -60) {
+                this.mob.setAggressive(false);
+                this.mob.setTarget(null);
+                this.mob.stopUsingItem();
+            } else if (flag) {
+                int i = this.mob.getTicksUsingItem();
+                if (i >= 30) {
                     this.mob.stopUsingItem();
-                } else if (flag) {
-                    int i = this.mob.getTicksUsingItem();
-                    if (i >= 30) {
-                        this.mob.stopUsingItem();
-                        this.attackMob.performRangedAttack(livingentity, BowItem.getPowerForTime(i));
-                        this.attackTime = this.attackIntervalMin;
-                    }
+                    this.attackMob.performRangedAttack(livingentity, BowItem.getPowerForTime(i));
+                    this.attackTime = this.attackIntervalMin;
                 }
-            } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
-                this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, (item) -> item instanceof BowItem));
             }
+        } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
+            this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, (item) -> item instanceof BowItem));
         }
     }
 
@@ -116,10 +119,10 @@ extends Goal {
             this.strafingTime = -1;
         }
         if (this.strafingTime >= 20) {
-            if (this.mob.getRandom().nextFloat() < 0.3) {
+            if (ThreadLocalRandom.current().nextFloat() < 0.3) {
                 this.strafingClockwise = !this.strafingClockwise;
             }
-            if (this.mob.getRandom().nextFloat() < 0.3) {
+            if (ThreadLocalRandom.current().nextFloat() < 0.3) {
                 this.strafingBackwards = !this.strafingBackwards;
             }
             this.strafingTime = 0;

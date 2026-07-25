@@ -1,11 +1,18 @@
 
 package com.github.NineAbyss9.ix_api.api.mobs;
 
+import org.slf4j.Logger;
+
 public interface IFlagMob
 {
     int getFlag();
 
     void setFlag(int flag);
+
+    default void nextFlag()
+    {
+        this.setFlag(this.getFlag() + 1);
+    }
 
     default int getAniTick()
     {
@@ -24,8 +31,7 @@ public interface IFlagMob
         this.setFlag(0);
     }
 
-    default void resetState()
-    {
+    default void resetState() {
         this.resetAniTick();
         this.resetFlag();
     }
@@ -48,5 +54,11 @@ public interface IFlagMob
     default void resetAniTick()
     {
         this.setAniTick(0);
+    }
+
+    default void sendMesAndReset(Logger logger)
+    {
+        logger.warn("Can't handle synched data in {}, resetting to 0", this.getClass().getSimpleName());
+        this.resetFlag();
     }
 }

@@ -12,7 +12,7 @@ public class ApiMobType {
     }
 
     public static boolean isNihilistic(MobType mobType) {
-        return mobType.equals(NIHILISTIC) || mobType.equals(NIHILISTIC_UNDEAD);
+        return mobType == NIHILISTIC || mobType == NIHILISTIC_UNDEAD;
     }
 
     static {

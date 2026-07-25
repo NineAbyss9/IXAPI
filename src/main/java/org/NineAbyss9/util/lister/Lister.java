@@ -1,11 +1,11 @@
 
 package org.NineAbyss9.util.lister;
 
-import org.NineAbyss9.math.MathSupport;
 import org.NineAbyss9.util.*;
 import org.NineAbyss9.value_holder.BooleanValueHolder;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.random.RandomGenerator;
@@ -17,6 +17,27 @@ public interface Lister<E> extends List<E>, Deque<E>, IXUtilUser
     <R> R apply(int index, Function<E, R> fun);
 
     boolean ifPresent(int index, Consumer<? super E> action);
+
+    /**@return a {@linkplain BooleanValueHolder} with the element at the specified index if it exists, otherwise {@code false}
+     * and {@code null}.<p>
+     * Use {@linkplain BooleanValueHolder#getBool()} to check if the element exists.*/
+    default BooleanValueHolder<E> tryGet(int index)
+    {
+        if (index >= size()) return new BooleanValueHolder<>(false, null);
+        return new BooleanValueHolder<>(true, get(index));
+    }
+
+    /**@throws IndexOutOfBoundsException if the index is out of bounds
+     *
+     * @return the element at the specified index.*/
+    default E getOrThrow(int index)
+    {
+        if (index < size()) {
+            return this.get(index);
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
+    }
 
     E get(int index);
 
@@ -36,14 +57,29 @@ public interface Lister<E> extends List<E>, Deque<E>, IXUtilUser
 
     BooleanValueHolder<E> addValue(E pValue);
 
+    default Elements<E> elements()
+    {
+        return Elements.mutable(this);
+    }
+
+    default void ifExists(int index, Consumer<? super E> pAction)
+    {
+        if (index >= size()) return;
+        pAction.accept(this.get(index));
+    }
+
+    /**Executes the given action for <strong>each element</strong> of this {@linkplain Lister} until all elements have been processed or
+     *  the action throws an exception.
+     *
+     *  @see #ifExists(int, Consumer) */
     default void ifNotEmpty(Consumer<? super E> pAction)
     {
-        if (!isEmpty())
-        {
-            Iterator<E> iterator = iterator();
-            while (iterator.hasNext())
-                pAction.accept(iterator.next());
+        if (this.isEmpty()) {
+            return;
         }
+        Iterator<E> iterator = iterator();
+        while (iterator.hasNext())
+            pAction.accept(iterator.next());
     }
 
     boolean contains(Object obj);
@@ -54,15 +90,11 @@ public interface Lister<E> extends List<E>, Deque<E>, IXUtilUser
     }
 
     default E sample() {
-        return sample(MathSupport.random);
+        return sample(ThreadLocalRandom.current());
     }
 
     default ImmutableSubLister<E> immutable() {
         return new ImmutableSubLister<>(this);
-    }
-
-    default SubLister<E> mutable() {
-        return new SubLister<>(this);
     }
 
     default Optional<E> checkedOptional(int index) {
@@ -81,7 +113,9 @@ public interface Lister<E> extends List<E>, Deque<E>, IXUtilUser
         return Option.of(this.get(index));
     }
 
-    /**Please use the method with cation*/
+    /**Please use the method with cation.
+     *
+     * @return a converted element at the specified index.*/
     default <T> T convert(int index) {
         return IXUtil.c.convert(this.get(index));
     }

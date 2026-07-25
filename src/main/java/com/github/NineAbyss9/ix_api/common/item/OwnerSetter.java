@@ -18,7 +18,7 @@ public class OwnerSetter
 
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
         if (entity instanceof Ownable own) {
-            if (own.getOwner() == null && own.wouldHaveOwner()) {
+            if (own.getOwner() == null && own.willBeOwned()) {
                 own.setOwner(player);
                 if (player.level().isClientSide) {
                     Minecraft.getInstance().gui.setOverlayMessage(Component.translatable(

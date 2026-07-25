@@ -19,6 +19,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.NineAbyss9.NineAbyssBase;
+import org.NineAbyss9.annotation.Unused;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
@@ -31,6 +32,7 @@ public class IXApi implements ModOfNineAbyss {
     public static final String NOIXMODAPI = "noixmodapi";
     public static final String BLUE_OCEANS = "blue_oceans";
     public static final Logger LOGGER = LogUtils.getLogger();
+    @Unused
     public static ApiAgent AGENT;
 
     public IXApi(FMLJavaModLoadingContext context) {

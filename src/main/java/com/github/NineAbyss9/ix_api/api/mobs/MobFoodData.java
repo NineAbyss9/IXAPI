@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 public class MobFoodData {
     private final Mob mob;
     protected final int maxFoodLevel;
-    private int foodLevel = 20;
+    private int foodLevel;
     private float saturationLevel;
     private float exhaustionLevel;
     private int tickTimer;

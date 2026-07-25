@@ -3,6 +3,7 @@ package org.NineAbyss9.util;
 
 import org.NineAbyss9.annotation.doc.Building;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -63,6 +64,8 @@ public final class Manager {
     }
 
     private class ManagerList extends ArrayList<Object> {
+        @Serial
+        private static final long serialVersionUID = 8730121772752990563L;
         public boolean add(Object object) {
             if (Manager.this.isLocked())
                 return false;
@@ -77,6 +80,8 @@ public final class Manager {
     }
 
     private class ManagerSet extends HashSet<Object> {
+        @Serial
+        private static final long serialVersionUID = -1965971592518372440L;
         public boolean add(Object object) {
             if (Manager.this.isLocked())
                 return false;

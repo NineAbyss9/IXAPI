@@ -6,7 +6,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
-import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
 public class ItemStacks {
@@ -17,27 +16,24 @@ public class ItemStacks {
         return new ItemStack(like, ApiRandom.nextInt(to));
     }
 
+    /**Creates an empty {@linkplain ItemStack}*/
     public static ItemStack of() {
         return ItemStack.EMPTY;
     }
 
-    @Nonnull
     public static ItemStack of(Item item) {
         return new ItemStack(item);
     }
 
-    @Nonnull
-    public static ItemStack of(@Nonnull Supplier<Item> item) {
+    public static ItemStack of(Supplier<Item> item) {
         return of(item.get());
     }
 
-    @Nonnull
     public static ItemStack of(Item item, int count) {
         return new ItemStack(item, count);
     }
 
-    @Nonnull
-    public static ItemStack of(@Nonnull Supplier<Item> item, int count) {
+    public static ItemStack of(Supplier<Item> item, int count) {
         return of(item.get(), count);
     }
 }

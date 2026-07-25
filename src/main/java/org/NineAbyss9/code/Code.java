@@ -1,7 +1,8 @@
 
 package org.NineAbyss9.code;
 
-public interface Code {
+public interface Code
+{
     /**Reads code*/
     String read();
 

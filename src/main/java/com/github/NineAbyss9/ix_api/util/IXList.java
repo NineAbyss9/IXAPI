@@ -2,10 +2,13 @@
 package com.github.NineAbyss9.ix_api.util;
 
 import javax.annotation.Nonnull;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class IXList<I> extends ArrayList<I> {
+    @Serial
+    private static final long serialVersionUID = -6542517598430774239L;
     IXList(int initialCapacity) {
         super(initialCapacity);
     }

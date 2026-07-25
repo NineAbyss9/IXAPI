@@ -7,6 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class Maths
 extends Mth {
@@ -26,11 +27,11 @@ extends Mth {
         if (x == 0) {
             return 0;
         }
-        return (random.nextInt(x)) * Maths.trueOrFalse();
+        return (ThreadLocalRandom.current().nextInt(x)) * Maths.trueOrFalse();
     }
 
     public static int randomInteger(int i) {
-        return Maths.randomInteger(i, random);
+        return Maths.randomInteger(i, ThreadLocalRandom.current());
     }
 
     public static int randomInteger(int i, @Nonnull Random source) {

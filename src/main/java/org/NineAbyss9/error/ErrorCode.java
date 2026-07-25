@@ -2,6 +2,7 @@
 package org.NineAbyss9.error;
 
 import org.NineAbyss9.code.Code;
+import org.NineAbyss9.util.IXUtil;
 
 import java.util.Objects;
 
@@ -25,7 +26,7 @@ public final class ErrorCode implements Code
 
     public void write(String s)
     {
-        throw new UnsupportedOperationException();
+        IXUtil.newUnsupportedOperation();
     }
 
     int getId() {

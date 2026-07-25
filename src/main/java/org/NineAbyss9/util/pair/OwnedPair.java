@@ -17,6 +17,16 @@ extends MutablePair<L, R>
         owner = ownerIn;
     }
 
+    public L left()
+    {
+        return left;
+    }
+
+    public R right()
+    {
+        return right;
+    }
+
     public L setLeft(L key)
     {
         if (TRACER.getCallerClass() != owner) {
@@ -31,6 +41,11 @@ extends MutablePair<L, R>
             return null;
         }
         return super.setRight(value);
+    }
+
+    public Pair<L, R> copy()
+    {
+        return new OwnedPair<L, R>(left, right, owner);
     }
 
     static {

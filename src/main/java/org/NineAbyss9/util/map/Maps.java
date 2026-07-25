@@ -9,6 +9,11 @@ import java.util.TreeMap;
 
 public final class Maps
 {
+    public static <K, V> HashMap<K, V> hashmap()
+    {
+        return new HashMap<K, V>();
+    }
+
     public static <K, V> HashMap<K, V> hashmap(K[] k, V[] v)
     {
         var map = new HashMap<K, V>();
@@ -25,10 +30,16 @@ public final class Maps
         return map;
     }
 
+    public static <K extends Comparable<K>, V> TreeMap<K, V> treemap()
+    {
+        return new TreeMap<K, V>();
+    }
+
     public static <K extends Comparable<K>, V> TreeMap<K, V> treemap(K[] k, V[] v)
     {
         var map = new TreeMap<K, V>();
         for (int i = 0;i< k.length;i++) {
+            if (i > v.length) break;
             map.put(k[i], v[i]);
         }
         return map;

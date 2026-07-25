@@ -10,7 +10,7 @@ public class Test {
     }*/
 
     public static void main(String[] args) {
-        //十个数
+        /*//十个数
         int[] numbers = {12, 16, 10, 21, 9, 25, 10, 6, 15, 13};
         System.out.println(Arrays.toString(numbers));
         //数量
@@ -35,6 +35,6 @@ public class Test {
         System.out.println(ssd.doubleValue());
         //方差
         BigDecimal d = ssd.divide(BigDecimal.valueOf(size));
-        System.out.println(d.doubleValue());
+        System.out.println(d.doubleValue());*/
     }
 }

@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+@FunctionalInterface
 public interface Holder<T> extends Supplier<T>, org.NineAbyss9.util.IXUtilUser
 {
     T get();
@@ -66,7 +67,7 @@ public interface Holder<T> extends Supplier<T>, org.NineAbyss9.util.IXUtilUser
     default T orElse(T other)
     {
         if (this.isPresent())
-            return get();
+            return (T)get();
         else
             return other;
     }
@@ -77,9 +78,9 @@ public interface Holder<T> extends Supplier<T>, org.NineAbyss9.util.IXUtilUser
     default Stream<T> stream()
     {
         if (isPresent())
-            return Stream.of(get());
+            return Stream.<T>of(get());
         else
-            return Stream.empty();
+            return Stream.<T>empty();
     }
 
     /**
@@ -90,7 +91,7 @@ public interface Holder<T> extends Supplier<T>, org.NineAbyss9.util.IXUtilUser
      */
     default T getIf(boolean flag)
     {
-        return ifOrElse(flag, null);
+        return ifOrElse(flag, (T)null);
     }
 
     /**
@@ -171,7 +172,7 @@ public interface Holder<T> extends Supplier<T>, org.NineAbyss9.util.IXUtilUser
 
         public T get()
         {
-            return value;
+            return this.value;
         }
     }
 }

@@ -43,7 +43,7 @@ public class Colors {
 
     public static double[] toDouble(float[] floats) {
         return new double[] {
-                floats[0], floats[1], floats[2]
+                (double)floats[0], (double)floats[1], (double)floats[2]
         };
     }
 

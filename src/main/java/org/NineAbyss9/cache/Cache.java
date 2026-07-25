@@ -8,11 +8,14 @@ import java.util.function.Function;
 
 @SuppressWarnings("unchecked")
 public class Cache {
+    /**For {@linkplain org.NineAbyss9.math.Unit}*/
+    public static final int UNIT = 0;
     private final Map<Integer, Object> caches = new LinkedHashMap<>();
     private static int next;
     private static Cache instance;
     public Cache() {
         instance = this;
+        caches.put(0, -1);
     }
 
     public static void clearCache() {

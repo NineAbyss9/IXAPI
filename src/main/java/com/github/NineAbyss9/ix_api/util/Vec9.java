@@ -11,6 +11,7 @@ import org.NineAbyss9.annotation.doc.Message;
 
 @PFMAreNonnullByDefault
 public final class Vec9 extends Vec3 {
+    public static final Vec9 ZERO = new Vec9(0.0D, 0.0D, 0.0D);
     public Vec9(double pX, double pY, double pZ) {
         super(pX, pY, pZ);
     }
@@ -19,8 +20,23 @@ public final class Vec9 extends Vec3 {
         super(vector3f);
     }
 
+    public Vec9 add(double pY)
+    {
+        return new Vec9(this.x, this.y + pY, this.z);
+    }
+
+    public Vec9 add(double pX, double pY, double pZ)
+    {
+        return new Vec9(this.x + pX, this.y + pY, this.z + pZ);
+    }
+
     public Vec9 add(double pX, double pZ) {
         return new Vec9(this.x + pX, this.y, this.z + pZ);
+    }
+
+    public Vec9 add(Vec3 pVec)
+    {
+        return new Vec9(this.x + pVec.x, this.y + pVec.y, this.z + pVec.z);
     }
 
     public MutableVec3 mutable() {
@@ -65,7 +81,7 @@ public final class Vec9 extends Vec3 {
     }
 
     public static Vec9 of() {
-        return new Vec9(0.0D, 0.0D, 0.0D);
+        return ZERO;
     }
 
     public static Vec9 of(double x, double y, double z) {
@@ -74,7 +90,7 @@ public final class Vec9 extends Vec3 {
 
     @Message("Already added")
     public static Vec9 of(BlockPos pos) {
-        return new Vec9(pos.getX() + 0.5d, pos.getY(), pos.getZ() + 0.5d);
+        return new Vec9(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
     }
 
     public static Vec9 of(MutableVec3 vec3) {

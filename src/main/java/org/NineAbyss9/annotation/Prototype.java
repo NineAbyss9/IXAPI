@@ -8,5 +8,5 @@ import java.lang.annotation.RetentionPolicy;
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 public @interface Prototype {
-    java.lang.String prototype();
+    String prototype();
 }

@@ -8,7 +8,10 @@ import java.util.Map;
 import java.util.Objects;
 
 public abstract class Pair<L, R>
-implements Map.Entry<L, R>, Comparable<Pair<L, R>>, java.io.Serializable, org.NineAbyss9.util.IXUtilUser {
+implements Map.Entry<L, R>, Comparable<Pair<L, R>>, java.io.Serializable, org.NineAbyss9.util.IXUtilUser
+{
+    private static final StackWalker STACK_WALKER =
+            StackWalker.getInstance();
     @java.io.Serial
     private static final long serialVersionUID = 8947688449640458794L;
     Pair() {
@@ -42,6 +45,8 @@ implements Map.Entry<L, R>, Comparable<Pair<L, R>>, java.io.Serializable, org.Ni
         return IXUtil.c.convert(this.right());
     }
 
+    /**@return the mutable version of this pair, but {@linkplain OwnedPair} doesn't.<p>
+     * And {@linkplain MutablePair} returns itself.*/
     public Pair<L, R> mutable() {
         return mutable(left(), right());
     }
@@ -108,23 +113,39 @@ implements Map.Entry<L, R>, Comparable<Pair<L, R>>, java.io.Serializable, org.Ni
     public int compareTo(Pair<L, R> o) {
         boolean leftEquals = Objects.equals(left(), o.left());
         boolean rightEquals = Objects.equals(right(), o.right());
-        return leftEquals && rightEquals ? 0 : leftEquals ? 1 : -1;
+        if (!leftEquals) return -1;
+        return rightEquals ? 0 : 1;
     }
 
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj instanceof Map.Entry<?,?> entry)
-            return Objects.equals(entry.getKey(), getKey()) && Objects.equals(entry.getValue(), getValue());
+        if (obj instanceof Map.Entry<?, ?> entry)
+            return Objects.equals(entry.getKey(), left()) && Objects.equals(entry.getValue(), right());
         return false;
     }
 
     public int hashCode() {
-        return Objects.hashCode(getKey()) ^ Objects.hashCode(getValue());
+        return Objects.hashCode(left()) ^ Objects.hashCode(right());
     }
 
     public String toString() {
         return "Pair{" + "left:" + this.left() + ", right:" + this.right() + "}";
+    }
+
+    public static <L, R> Pair<L, R> owned(L left, R right, Class<?> owner)
+    {
+        return new OwnedPair<L, R>(left, right, owner);
+    }
+
+    public static <L, R> Pair<L, R> owned(L left, R right)
+    {
+        return new OwnedPair<L, R>(left, right, STACK_WALKER.getCallerClass());
+    }
+
+    public static <L, R> Pair<L, R> owned()
+    {
+        return new OwnedPair<L, R>(null, null, STACK_WALKER.getCallerClass());
     }
 
     public static <L, R> Pair<L, R> mutable(L left, R right) {
